@@ -5,4 +5,7 @@
 #include "ProtocolStateHandler.h"
 
 namespace protocom {
+    ProtocolStateHandler::ProtocolStateHandler(ProtocolContext &ctx) : ctx(ctx) {
+
+    }
 } // protocom

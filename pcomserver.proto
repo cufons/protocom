@@ -1,19 +1,65 @@
 syntax = "proto3";
 //TODO implement the rest of protocol
-enum KexAlg {
-  KEX_UNKNOWN = 0;
-  KEX_ECDH = 1;
-}
-message ClientPhaseInit {
-  KexAlg alg = 1;
-  bytes pubkey = 2;
-}
-
-message ServerPhaseInit {
-  message ServerPkeyEx {
-    KexAlg alg = 1;
-    bytes pubkey = 2;
+option optimize_for = LITE_RUNTIME;
+message KexMsg {
+  enum KexAlg {
+    KEX_UNKNOWN = 0;
+    KEX_ECDH = 1;
   }
+  KexAlg alg = 1;
+  bytes pkey = 2;
+}
 
-  ServerPkeyEx kex = 1;
+//Initial connection phase
+message ClientConnectedStateRequest {
+  enum RequestType {
+    UNKNOWN = 0;
+    REQUEST_KEX = 1;
+    REQUEST_AUTH = 2;
+  };
+  RequestType type = 1;
+  optional KexMsg kex = 2;
+}
+
+message ServerConnectedStateResponse {
+  enum ResponseStatus {
+    UNKNOWN = 0;
+    OK = 1;
+    INVALID_REQUEST = 2;
+    REQUEST_ERROR = 3;
+    DECODE_ERROR = 4;
+    AUTH_REQUIRED = 5;
+  }
+  ResponseStatus status = 1;
+  optional KexMsg kex = 2;
+}
+
+//Authentication phase
+message ClientAuthRequest {
+  enum RequestType {
+    UNKNOWN = 0;
+    AUTH_SUPPLY = 1;
+    AUTH_INFO = 2;
+  }
+  RequestType request = 1;
+}
+
+message ServerAuthResponse {
+  enum ResponseStatus {
+    UNKNOWN = 0;
+    AUTH_ACCEPT = 1;
+    AUTH_REJECT = 2;
+    AUTH_CONTINUE = 3;
+    INVALID_REQUEST = 4;
+    DECODE_ERROR = 5;
+  }
+  enum AuthMethod {
+    AUTH_UNKNOWN = 0;
+    AUTH_CHALLENGE = 1;
+    AUTH_KEY = 2;
+  }
+  ResponseStatus status = 1;
+  optional string serverInfo = 2;
+  repeated AuthMethod method = 3;
+
 }

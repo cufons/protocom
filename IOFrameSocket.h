@@ -17,14 +17,14 @@ namespace protocom {
         size_t try_recv(void* buf,size_t n);
         size_t try_send(const void* buf,size_t n);
     public:
-        explicit IOFrameSocket(int sockfd);
+        explicit IOFrameSocket(int sockfd,int timeout = 0);
         bool sendFrame(PFrame &f);
         bool recvFrame(PFrame &f);
 
         bool readFrame(PFrame &f) override;
         bool writeFrame(PFrame &f)override;
 
-        bool isOpen() override;
+        bool isEOF() override;
         void setTimeout(int seconds) const;
     };
 

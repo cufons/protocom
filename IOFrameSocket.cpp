@@ -25,7 +25,7 @@ namespace protocom {
 
     bool IOFrameSocket::recvFrame(PFrame &frame) {
         size_t nrecv = try_recv(&frame.header,1);
-        if (!nrecv || (frame.header & 0xF0) != 0x70) {
+        if (!nrecv || ((frame.header & 0xF0) != 0xF0)) {
             return false;
         }
         if (!try_recv(&frame.len, 2)) {
@@ -47,8 +47,11 @@ namespace protocom {
         return true;
     }
 
-    IOFrameSocket::IOFrameSocket(int sockfd) : sockfd(sockfd) {
+    IOFrameSocket::IOFrameSocket(int sockfd,int timeout) : sockfd(sockfd) {
         conn_open = true;
+        if(timeout > 0) {
+            setTimeout(timeout);
+        }
     }
 
     size_t IOFrameSocket::try_recv(void *buf, size_t n) {
@@ -56,7 +59,10 @@ namespace protocom {
         ssize_t nrecv = recv(sockfd, buf, n, 0);
         if(!nrecv) conn_open = false;
         if (nrecv == -1) {
-            perror("[ClientHandler::try_recv] recv failed");
+            if(errno == EAGAIN || errno == EWOULDBLOCK) {
+                return 0;
+            }
+            perror("[ServerClientHandler::try_recv] recv failed");
             throw std::system_error(errno, std::generic_category());
         }
         return nrecv;
@@ -67,7 +73,10 @@ namespace protocom {
         size_t nsent = send(sockfd,buf,n,0);
         if(!nsent) conn_open = false;
         if(nsent == -1) {
-            perror("[ClientHandler::try_send] send failed");
+            if(errno == EAGAIN || errno == EWOULDBLOCK) {
+                return 0;
+            }
+            perror("[ServerClientHandler::try_send] send failed");
             throw std::system_error(errno, std::generic_category());
         }
         return nsent;
@@ -95,7 +104,7 @@ namespace protocom {
         }
     }
 
-    bool IOFrameSocket::isOpen() {
-        return conn_open;
+    bool IOFrameSocket::isEOF() {
+        return !conn_open;
     }
 } // protocom

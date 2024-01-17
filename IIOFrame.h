@@ -6,6 +6,7 @@
 #define PROTOCOM_IIOFRAME_H
 
 #include <cstdint>
+#include <vector>
 
 namespace protocom {
     struct PFrame {
@@ -19,7 +20,7 @@ namespace protocom {
         virtual ~IIOFrame() = default;
         virtual bool writeFrame(PFrame& f) = 0;
         virtual bool readFrame(PFrame& f) = 0;
-        virtual bool isOpen() = 0;
+        virtual bool isEOF() = 0;
     };
 }
 
