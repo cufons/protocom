@@ -2,7 +2,7 @@
 // Created by cufon on 13.01.24.
 //
 
-#include "MessageCoder.h"
+#include "protocom/MessageCoder.h"
 
 namespace protocom {
     bool MessageCoder::decode(const PFrame &frame, MessageLite &msg) {

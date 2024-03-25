@@ -2,7 +2,7 @@
 // Created by cufon on 13.01.24.
 //
 
-#include "x25519KexProtocol.h"
+#include "protocom/x25519KexProtocol.h"
 namespace protocom {
     x25519KexProtocol::x25519KexProtocol() : privKey(x25519::SECRET_KEYLENGTH), pubKey(x25519::PUBLIC_KEYLENGTH), pubKeyOther(0),
                                              shared(x25519::SHARED_KEYLENGTH),isInit(false) {

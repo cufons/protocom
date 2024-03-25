@@ -3,7 +3,7 @@
 //
 
 #include <cryptopp/files.h>
-#include "EncrMessageCoder.h"
+#include "protocom/EncrMessageCoder.h"
 
 namespace protocom {
     EncrMessageCoder::EncrMessageCoder(SecByteBlock& key) :  EncrMessageCoder() {

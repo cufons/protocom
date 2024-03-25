@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="61ddc925-242d-467f-b3ab-05596a9dc9a2" name="china-camera">
+        <fileTransfer rootFolder="/tmp/sdcard" accessType="SFTP" host="china-camera" port="22" sshConfigId="fd760a24-1748-44f4-903a-f4aa73daaf7d" sshConfig="root@china-camera:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

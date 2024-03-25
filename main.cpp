@@ -1,16 +1,19 @@
 #include <iostream>
 #include <cstdio>
-#include "msg.pb.h"
-#include "Server.h"
-#include "x25519KexProtocol.h"
-#include "EncrMessageCoder.h"
-#include "TestClient.h"
+#include "protocom/msg.pb.h"
+#include "protocom/Server.h"
+#include "protocom/x25519KexProtocol.h"
+#include "protocom/EncrMessageCoder.h"
+#include "protocom/Client.h"
 #include <cryptopp/hex.h>
 #include <cryptopp/files.h>
-#include "TestUserHandlerFactory.h"
+#include "protocom/TestUserHandlerFactory.h"
+#include "testuserprotocol.pb.h"
 #include <chrono>
+#include <csignal>
+
 void runClientTest() {
-    protocom::TestClient c("127.0.0.1", 4444);
+    protocom::Client c("10.1.0.10", 4444);
     if(c.connect()) {
         std::cout << "Connected!!" << std::endl;
     } else {
@@ -33,6 +36,12 @@ void runClientTest() {
     }
 
 }
+protocom::Server* srv = nullptr;
+void cleanup() {
+    std::cout << "Server exiting" << std::endl;
+    delete srv;
+    exit(0);
+}
 int main(int argc,char** argv) {
     if(argc > 1) {
         if(std::string("clientTest") == argv[1]) {
@@ -40,6 +49,7 @@ int main(int argc,char** argv) {
             return 0;
         }
     }
+    signal(SIGINT,[](int signum) { cleanup();});
     protocom::Test t;
     t.set_id(324);
     t.set_str("A string");
@@ -98,9 +108,11 @@ int main(int argc,char** argv) {
     std::cout << "shared(B): ";
     CryptoPP::StringSource(keyb,keyb.size(), true,new CryptoPP::Redirector(enc));
     std::cout << std::endl;
-    protocom::Server s("127.0.0.1",4444);
-    s.setUserHandlerFactory(new protocom::TestUserHandlerFactory());
-    s.bindSock();
-    s.run();
+    srv = new protocom::Server("0.0.0.0",4444);
+    //protocom::Server s("0.0.0.0",4444);
+    srv->setUserHandlerFactory(new protocom::TestUserHandlerFactory());
+    srv->bindSock();
+    srv->run();
+    cleanup();
     return 0;
 }

@@ -6,7 +6,7 @@
 #include <system_error>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include "IOFrameSocket.h"
+#include "protocom/IOFrameSocket.h"
 
 namespace protocom {
     bool IOFrameSocket::sendFrame(PFrame &f) {

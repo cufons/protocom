@@ -2,12 +2,12 @@
 // Created by cufon on 12.01.24.
 //
 
-#include "ProtocolContext.h"
-#include "ProtocolConnectedHandler.h"
+#include "protocom/ProtocolContext.h"
+#include "protocom/ProtocolConnectedHandler.h"
 
 namespace protocom {
-    ProtocolContext::ProtocolContext(ProtocolUserHandlerFactory &finalStateFactory)
-            : io(nullptr), finalStateFactory(finalStateFactory) {
+    ProtocolContext::ProtocolContext(ProtocolUserHandlerFactory &finalStateFactory, Server &serverInstance)
+            : io(nullptr), finalStateFactory(finalStateFactory), serverInstance(serverInstance) {
         state = new ProtocolConnectedHandler(*this);
     }
 
@@ -37,5 +37,9 @@ namespace protocom {
 
     bool ProtocolContext::isActive() {
         return state;
+    }
+
+    Server &ProtocolContext::getServerInstance() const {
+        return serverInstance;
     }
 } // protocom

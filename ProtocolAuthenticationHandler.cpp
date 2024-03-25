@@ -2,7 +2,7 @@
 // Created by cufon on 16.01.24.
 //
 
-#include "ProtocolAuthenticationHandler.h"
+#include "protocom/ProtocolAuthenticationHandler.h"
 
 namespace protocom {
     ProtocolAuthenticationHandler::ProtocolAuthenticationHandler(ProtocolContext &ctx, MessageCoder *coder)

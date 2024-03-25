@@ -2,10 +2,10 @@
 // Created by cufon on 17.01.24.
 //
 
-#include "TestUserHandler.h"
+#include "protocom/TestUserHandler.h"
 
 namespace protocom {
-
+    using string = std::basic_string<char>;
     TestUserHandler::TestUserHandler(ProtocolContext &ctx, MessageCoder *coder) : ProtocolUserHandler(ctx, coder) {}
 
     void TestUserHandler::handleMsg(UserRequest &msg) {

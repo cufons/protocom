@@ -2,12 +2,13 @@
 // Created by cufon on 12.01.24.
 //
 
-#include "ProtocolConnectedHandler.h"
-#include "x25519KexProtocol.h"
-#include "EncrMessageCoder.h"
-#include "ProtocolAuthenticationHandler.h"
+#include "protocom/ProtocolConnectedHandler.h"
+#include "protocom/x25519KexProtocol.h"
+#include "protocom/EncrMessageCoder.h"
+#include "protocom/ProtocolAuthenticationHandler.h"
 
 namespace protocom {
+    using string = std::basic_string<char>;
     ProtocolConnectedHandler::ProtocolConnectedHandler(ProtocolContext &ctx)
             : ProtocolStateHandler(ctx), isKexComplete(false), response(nullptr), request(nullptr) {
         request = google::protobuf::Arena::CreateMessage<ClientConnectedStateRequest>(&arena);

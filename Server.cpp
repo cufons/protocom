@@ -4,9 +4,10 @@
 
 #include <cstring>
 #include <iostream>
-#include "Server.h"
-#include "ServerClientHandler.h"
-#include "NullUserHandlerFactory.h"
+#include <csignal>
+#include "protocom/Server.h"
+#include "protocom/ServerClientHandler.h"
+#include "protocom/NullUserHandlerFactory.h"
 
 namespace protocom {
     Server::Server(const char *ip, uint16_t port, int max_clients) : max_threads(max_clients),active_threads(0), running(false), fd(-1),
@@ -15,7 +16,8 @@ namespace protocom {
                                                                        .sin_port = htons(port),
                                                                        .sin_addr = {inet_addr(ip)}
 
-                                                               },userHandlerFactory(new NullUserHandlerFactory()) {}
+                                                               },userHandlerFactory(new NullUserHandlerFactory()),
+                                                               info_string("A server."){}
 
     bool Server::bindSock() {
         fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -35,6 +37,7 @@ namespace protocom {
             return false;
         }
         running = true;
+        //signal(SIGINT, [](int sig) { globalStop = true;});
         return true;
     }
 
@@ -43,7 +46,7 @@ namespace protocom {
             sockaddr_in client_addr = {0};
             socklen_t claddr_len = sizeof(client_addr);
             int client_fd = accept(fd, (sockaddr *) (&client_addr), &claddr_len);
-            if (fd == -1) {
+            if (client_fd == -1) {
                 if (errno == ECONNABORTED) {
                     puts("Connection aborted. Skipping...");
                     continue;
@@ -51,6 +54,10 @@ namespace protocom {
                 perror("Accept failed!");
                 running = false;
                 continue;
+            }
+            if(!client_fd) {
+                std::cout << "Server socket closed. Bye" << std::endl;
+                break;
             }
            printf("Accepted connection from %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
             if (!spawnHandler(client_fd, client_addr)) {
@@ -71,18 +78,19 @@ namespace protocom {
     }
 
     Server::~Server() {
+        handlerThreads.clear();
         delete userHandlerFactory;
         if (fd != -1) close(fd);
     }
 
     bool Server::spawnHandler(int clientfd, struct sockaddr_in client_addr) {
         if (active_threads >= max_threads) return false;
-        handlerThreads.emplace_back(Server::handlerThreadWorker, clientfd, client_addr,std::ref(active_threads), userHandlerFactory);
+        handlerThreads.emplace_back(Server::handlerThreadWorker, clientfd, client_addr,std::ref(active_threads), userHandlerFactory,std::ref(*this));
         return true;
     }
 
-    void Server::handlerThreadWorker(int clientfd, struct sockaddr_in client_addr,std::atomic<int>& active_counter,ProtocolUserHandlerFactory* factory) {
-        ServerClientHandler connHandler(*factory,clientfd, client_addr);
+    void Server::handlerThreadWorker(int clientfd, struct sockaddr_in client_addr,std::atomic<int>& active_counter,ProtocolUserHandlerFactory* factory,Server& srvInstance) {
+        ServerClientHandler connHandler(*factory,clientfd, client_addr,srvInstance);
         active_counter++;
         std::cout << "Worker stared" << std::endl;
         try {
@@ -99,5 +107,15 @@ namespace protocom {
 
     void Server::setUserHandlerFactory(ProtocolUserHandlerFactory *factory) {
         userHandlerFactory = factory;
+    }
+
+
+    void Server::terminate() {
+        running = false;
+        handlerThreads.clear();
+    }
+
+    void Server::setInfoString(const std::string &s) {
+        info_string = s;
     }
 }

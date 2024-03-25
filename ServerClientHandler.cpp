@@ -5,12 +5,13 @@
 #include <cstdio>
 #include <stdexcept>
 #include <system_error>
-#include "ServerClientHandler.h"
-#include "IOFrameSocket.h"
+#include "protocom/ServerClientHandler.h"
+#include "protocom/IOFrameSocket.h"
+#include "protocom/Server.h"
 
 namespace protocom {
-    ServerClientHandler::ServerClientHandler(ProtocolUserHandlerFactory& factory,int clientFd, const sockaddr_in &cliaddr) : client_fd(clientFd),
-                                                                                         cliaddr(cliaddr), ctx(factory) {
+    ServerClientHandler::ServerClientHandler(ProtocolUserHandlerFactory& factory,int clientFd, const sockaddr_in &cliaddr,Server& serverInstance) : client_fd(clientFd),
+                                                                                         cliaddr(cliaddr), ctx(factory,serverInstance) {
         running = true;
         io = new IOFrameSocket(clientFd,1);
         ctx.setIO(io);
