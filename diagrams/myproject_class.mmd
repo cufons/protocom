@@ -1,0 +1,540 @@
+classDiagram
+    class C_0001772138383063081990["PFrame"]
+    class C_0001772138383063081990 {
+        +PFrame() : void
+        +PFrame(const PFrame & other) : void
+        +PFrame(PFrame && other) : void
+        +~PFrame() : void
+        +operator=(const PFrame & other) : PFrame &
+        +operator=(PFrame && other) : PFrame &
+        +allocMsg() : void
+        +erase() : void
+        -hasDynamicData : bool
+        +header : uint8_t
+        +len : uint16_t
+        +msg : const uint8_t *
+    }
+    class C_0000368255071736256037["IFrameIO"]
+    class C_0000368255071736256037 {
+        <<abstract>>
+        +~IFrameIO() : [default] void
+        +isEOF() : bool*
+        +isReadExhausted() : bool*
+        +isWriteExhausted() : bool*
+        +readFrame(PFrame & f) : bool*
+        +writeFrame(PFrame & f) : bool*
+    }
+    class C_0000413225465354068283["WorkQueue"]
+    class C_0000413225465354068283 {
+        +WorkQueue() : void
+        +cancelFetch() : void
+        +fetchItemBlocking(WorkItem & itm) : void
+        +fetchItemNonBlocking(WorkItem & itm) : bool
+        +getQueuedCount() : int
+        +pushItem(const WorkItem & itm) : void
+        +pushItem(WorkItem && itm) : void
+        +setItemLimit(unsigned long n) : void
+        -cv : std::condition_variable
+        -fetchCancelled : bool
+        -itemLimit : unsigned long
+        -queue : std::queue&lt;WorkItem&gt;
+        -queueMutex : std::mutex
+    }
+    class C_0001851961472811287418["WorkQueue::CancelledException"]
+    class C_0001851961472811287418 {
+        -what() : [const] const char *
+    }
+    class C_0002079222692820923786["PFramer"]
+    class C_0002079222692820923786 {
+        +PFramer(WorkQueue & wq, int fd) : void
+        +isReadAgain() : [const] bool
+        +isReadEof() : [const] bool
+        -pushFrame() : void
+        +readAll() : void
+        -reset() : void
+        +tryRead() : bool
+        -tryRecv(void * buf, size_t n) : size_t
+        -assocFd : int
+        -lenRemainingBytes : unsigned int
+        -msgRemainingBytes : unsigned int
+        -readAgain : bool
+        -readEOF : bool
+        -readInProgress : bool
+        -rxdFrame : PFrame
+        -state : enum RxState
+        -wq : WorkQueue &
+    }
+    class C_0000744513698636528658["PFramer::RxState"]
+    class C_0000744513698636528658 {
+        <<enumeration>>
+        RX_HEADER
+        RX_LEN
+        RX_MSG
+    }
+    class C_0002016596168367621613["IFrameSink"]
+    class C_0002016596168367621613 {
+        <<abstract>>
+        +~IFrameSink() : [default] void
+        +writeFrame(PFrame & frame) : bool*
+    }
+    class C_0000521409481286509234["MessageCoder"]
+    class C_0000521409481286509234 {
+        +decode(const PFrame & frame, MessageLite & msg) : bool
+        +encode(PFrame & frame, const MessageLite & msg) : bool
+        -frame_bytes : std::vector&lt;uint8_t&gt;
+    }
+    class C_0001013167965629105335["ProtocolUserHandlerFactory"]
+    class C_0001013167965629105335 {
+        <<abstract>>
+        +createHandler(ProtocolContext & ctx, MessageCoder * coder) : [const] ProtocolStateHandler **
+    }
+    class C_0000159043066032490316["ProtocolContext"]
+    class C_0000159043066032490316 {
+        +ProtocolContext(ProtocolUserHandlerFactory * finalStateFactory, Server & serverInstance) : void
+        +~ProtocolContext() : void
+        +getFinalStateFactory() : [const] ProtocolUserHandlerFactory *
+        +getIO() : [const] IFrameSink &
+        +getServerInstance() : [const] Server &
+        +handleFrame(PFrame & frame) : void
+        +isActive() : bool
+        +setIO(IFrameSink * io) : void
+        +setState(ProtocolStateHandler * newState) : void
+        +finalStateFactory : ProtocolUserHandlerFactory *
+        -io : IFrameSink *
+        -serverInstance : Server &
+        -state : ProtocolStateHandler *
+    }
+    class C_0001108562568155713252["ProtocolStateHandler"]
+    class C_0001108562568155713252 {
+        <<abstract>>
+        +ProtocolStateHandler(ProtocolContext & ctx) : void
+        +~ProtocolStateHandler() : [default] void
+        +handleFrame(PFrame & frame) : void*
+        #ctx : ProtocolContext &
+    }
+    class C_0000125432330192061577["ProtocolUserHandler&lt;Req,Resp&gt;"]
+    class C_0000125432330192061577 {
+        <<abstract>>
+        +ProtocolUserHandler(ProtocolContext & ctx, MessageCoder * coder) : void
+        +~ProtocolUserHandler() : void
+        +handleDecodeErr() : void*
+        -handleFrame(PFrame & frame) : void
+        +handleMsg(Req & msg) : void*
+        #sendResp() : void
+        -arena : Arena
+        -coder : MessageCoder *
+        #request : Req *
+        #response : Resp *
+    }
+    class C_0000099517403415114378["Server"]
+    class C_0000099517403415114378 {
+        +Server(const char * ip, uint16_t port) : void
+        +~Server() : void
+        -acceptClient() : void
+        +bindSock() : bool
+        +closeClient(int fd) : void
+        -closeClient(ConnectionContext & cctx) : void
+        -createHandler(int clientfd, struct sockaddr_in client_addr) : bool
+        -destroyHandler(int clientfd) : void
+        -epollAddClient(int client_fd) : bool
+        -epollDelClient(int client_fd) : bool
+        +getAuthenticator() : [const] Authenticator *
+        +getEventFdOut() : [const] int
+        +handleDataIn(ConnectionContext & cctx) : void
+        +handleDataOut() : void
+        +isRunning() : [const] bool
+        +run() : void
+        +setAuthenticator(Authenticator * authenticator) : void
+        +setInfoString(const std::string & s) : void
+        +setUserHandlerFactory(ProtocolUserHandlerFactory * factory) : void
+        +stop() : void
+        +terminate() : void
+        -authenticator : Authenticator *
+        -epollFd : int
+        -eventFdOut : int
+        -fd : int
+        -fdInfoTable : std::unordered_map&lt;int,ConnectionContext&gt;
+        -fdTableMtx : std::mutex
+        -info_string : std::string
+        -running : std::atomic_bool
+        -srv_addr : struct sockaddr_in
+        -userHandlerFactory : ProtocolUserHandlerFactory *
+        -worker : ServerWorker *
+        -wqIn : WorkQueue
+        -wqOut : WorkQueue
+    }
+    class C_0000421220929588781000["ProtocolAuthenticationHandler"]
+    class C_0000421220929588781000 {
+        +ProtocolAuthenticationHandler(ProtocolContext & ctx, MessageCoder * coder) : void
+        +doAuth() : void
+        +handleFrame(PFrame & frame) : void
+        -proceedAuth() : void
+        -respWithStatus(ServerAuthResponse::ResponseStatus status) : void
+        -arena : google::protobuf::Arena
+        -coder : MessageCoder *
+        -remainingAttempts : int
+        -request : ClientAuthRequest *
+        -response : ServerAuthResponse *
+    }
+    class C_0000937459447376874050["ServerWorker"]
+    class C_0000937459447376874050 {
+        +ServerWorker(WorkQueue & wqIn, WorkQueue & wqOut, Server & serverInstance, ProtocolUserHandlerFactory * userHandlerFactory, int notifFd) : void
+        +createContext(int fd) : void
+        +destroyContext(int fd) : void
+        -run() : void
+        +setUserHandlerFactory(ProtocolUserHandlerFactory * userHandlerFactory) : void
+        +start() : void
+        +stop() : void
+        -handlerTable : std::unordered_map&lt;int,ProtocolContext *&gt;
+        -htMutex : std::mutex
+        -notifFd : int
+        -runnerThread : std::thread *
+        -serverInstance : Server &
+        -shouldStop : bool
+        -userHandlerFactory : ProtocolUserHandlerFactory *
+        -wqIn : WorkQueue &
+        -wqOut : WorkQueue &
+    }
+    class C_0001815292306860725455["ServerWorker::FrameSink"]
+    class C_0001815292306860725455 {
+        +FrameSink(WorkQueue & q, int targetFd, int notifEventFd) : void
+        +writeFrame(PFrame & frame) : bool
+        +~FrameSink() : void
+        -notifEventFd : int
+        -q : WorkQueue &
+        -targetFd : int
+    }
+    class C_0000905078507790989285["PDeframer"]
+    class C_0000905078507790989285 {
+        +PDeframer() : void
+        +isWriteAgain() : [const] bool
+        +isWriteEof() : [const] bool
+        +isWriteInProgress() : [const] bool
+        -resetAll() : void
+        +resetState() : void
+        +setSentItem(const WorkItem & sentItem) : bool
+        -trySend(void * buf, size_t n) : size_t
+        +tryWrite() : bool
+        +writeAll() : bool
+        -assocFd : int
+        -lenRemainingBytes : unsigned int
+        -msgRemainingBytes : unsigned int
+        -state : enum RxState
+        -txdFrame : PFrame
+        -writeAgain : bool
+        -writeEOF : bool
+        -writeInProgress : bool
+    }
+    class C_0000032890696926555652["PDeframer::RxState"]
+    class C_0000032890696926555652 {
+        <<enumeration>>
+        TX_HEADER
+        TX_LEN
+        TX_MSG
+    }
+    class C_0001399992001799140315["IAuthenticationStrategy"]
+    class C_0001399992001799140315 {
+        <<abstract>>
+        +~IAuthenticationStrategy() : [default] void
+        +verify(ClientAuthRequest & req) : bool*
+    }
+    class C_0001669769533097337270["TrustAuthentication"]
+    class C_0001669769533097337270 {
+        +verify(ClientAuthRequest & req) : bool
+    }
+    class C_0000282408967583958009["PasswordAuthentication"]
+    class C_0000282408967583958009 {
+        +PasswordAuthentication(std::string password) : void
+        +verify(ClientAuthRequest & req) : bool
+        -password : std::string
+    }
+    class C_0002154100137202431943["UserInfo"]
+    class C_0002154100137202431943 {
+        +~UserInfo() : void
+        +supportedAuths : std::list&lt;IAuthenticationStrategy *&gt;
+    }
+    class C_0000704468137843898889["Authenticator"]
+    class C_0000704468137843898889 {
+        +addUser(const std::string & username, IAuthenticationStrategy * method) : void
+        +authenticate(ClientAuthRequest & req) : bool
+        +delUser(const std::string & username) : void
+        -userTable : std::unordered_map&lt;std::string,UserInfo&gt;
+    }
+    class C_0000439368331391122494["ConnectionContext"]
+    class C_0000439368331391122494 {
+        +ConnectionContext(int fd, WorkQueue & wqin, WorkQueue & wqout, sockaddr_in & client_addr) : void
+        +client_addr : sockaddr_in
+        +deframer : PDeframer
+        +fd : int
+        +framer : PFramer
+        +txReady : bool
+    }
+    class C_0000970574400319610151["NullUserHandlerFactory"]
+    class C_0000970574400319610151 {
+        +createHandler(ProtocolContext & ctx, MessageCoder * coder) : [const] ProtocolStateHandler *
+    }
+    class C_0001080990835532108106["TestUserHandlerFactory"]
+    class C_0001080990835532108106 {
+        -createHandler(ProtocolContext & ctx, MessageCoder * coder) : [const] ProtocolStateHandler *
+    }
+    class C_0000788431645964313302["ProtocolUserHandler&lt;UserRequest,ServerResponse&gt;"]
+    class C_0000788431645964313302 {
+    }
+    class C_0001887797911965546684["TestUserHandler"]
+    class C_0001887797911965546684 {
+        +TestUserHandler(ProtocolContext & ctx, MessageCoder * coder) : void
+        -handleDecodeErr() : void
+        -handleMsg(UserRequest & msg) : void
+    }
+    class C_0001557316170505719203["ProtocolConnectedHandler"]
+    class C_0001557316170505719203 {
+        +ProtocolConnectedHandler(ProtocolContext & ctx) : void
+        +~ProtocolConnectedHandler() : void
+        -handleAuthRequest() : void
+        +handleFrame(PFrame & frame) : void
+        -handleKex() : void
+        -respWithStatus(ServerConnectedStateResponse::ResponseStatus status) : void
+        -arena : google::protobuf::Arena
+        -coder : MessageCoder *
+        -isKexComplete : bool
+        -request : ClientConnectedStateRequest *
+        -response : ServerConnectedStateResponse *
+    }
+    class C_0000181946487677438623["x25519KexProtocol"]
+    class C_0000181946487677438623 {
+        +x25519KexProtocol() : void
+        +agree() : bool
+        +getKey256(SecByteBlock & key) : bool
+        +getPubKey() : [const] const SecByteBlock *
+        +getShared() : [const] const SecByteBlock *
+        +init() : void
+        +loadOtherKey(const SecByteBlock * otherKey) : void
+        +loadOtherKeyArr(const unsigned char * buf, size_t size) : bool
+        -isInit : bool
+        -isSharedSecretAgreed : bool
+        -kdf : SHA512
+        -kexObj : x25519
+        -privKey : SecByteBlock
+        -prng : AutoSeededRandomPool
+        -pubKey : SecByteBlock
+        -pubKeyOther : SecByteBlock
+        -shared : SecByteBlock
+    }
+    class C_0001852152343959166745["EncrMessageCoder"]
+    class C_0001852152343959166745 {
+        +EncrMessageCoder() : void
+        +EncrMessageCoder(SecByteBlock & key) : void
+        +EncrMessageCoder(SecByteBlock & key, SecByteBlock & iv) : void
+        +decode(const PFrame & frame, MessageLite & msg) : bool
+        +encode(PFrame & frame, const MessageLite & msg) : bool
+        +getIV() : [const] const SecByteBlock &
+        +setIV(const SecByteBlock & iv) : void
+        -decr : GCM&lt;AES&gt;::Decryption
+        -enc : CryptoPP::HexEncoder
+        -encr : GCM&lt;AES&gt;::Encryption
+        -init_iv : SecByteBlock
+        -ivsize : const size_t
+        -key : SecByteBlock
+        -msgBuf : std::vector&lt;uint8_t&gt;
+        -prng : AutoSeededRandomPool
+    }
+    class C_0000072811412987537340["IOFrameSocket"]
+    class C_0000072811412987537340 {
+        +IOFrameSocket(int sockfd, int timeout = 0) : void
+        +isEOF() : bool
+        +isReadExhausted() : bool
+        +isWriteExhausted() : bool
+        +readFrame(PFrame & f) : bool
+        +recvFrame(PFrame & f) : bool
+        +sendFrame(PFrame & f) : bool
+        +setTimeout(int seconds) : [const] void
+        -try_recv(void * buf, size_t n) : size_t
+        -try_send(const void * buf, size_t n) : size_t
+        +writeFrame(PFrame & f) : bool
+        -conn_open : bool
+        -msgBuf : std::vector&lt;uint8_t&gt;
+        -read_eagain : bool
+        -sockfd : int
+        -write_eagain : bool
+    }
+    class C_0001106453201833708579["Client"]
+    class C_0001106453201833708579 {
+        +Client(const char * ip, uint16_t port) : void
+        +~Client() : void
+        +authenticate(const std::string & username, const std::string & password) : bool
+        +connect() : bool
+        -connect_sock(int socketTimeout = 0) : bool
+        -dump_error(MessageLite & msg) : void$
+        -fetchMsg(MessageLite & msg) : bool
+        +fetchRequest(const MessageLite & req, MessageLite & resp) : bool
+        +hasAuthenticated() : [const] bool
+        +hasConnected() : [const] bool
+        +hasServerClosed() : [const] bool
+        -sendMsg(const MessageLite & msg) : bool
+        -coder : MessageCoder *
+        -fd : int
+        -io : IFrameIO *
+        -isAuthenticated : bool
+        -isConnected : bool
+        -remAddr : sockaddr_in
+    }
+    class C_0001613713295908831163["Test"]
+    class C_0001613713295908831163 {
+        +Test() : void
+        +Test(const Test & from) : void
+        +Test(Test && from) : void
+        #Test(google::protobuf::Arena * arena) : void
+        #Test(google::protobuf::Arena * arena, const Test & from) : void
+        #Test(google::protobuf::Arena * arena, Test && from) : void
+        +Test<typename=void>(google::protobuf::internal::ConstantInitialized) : void
+        +~Test() : void
+        +operator=(const Test & from) : Test &
+        +operator=(Test && from) : Test &
+        +ByteSizeLong() : [const] ::size_t
+        +Clear() : void
+        +CopyFrom(const Test & from) : void
+        -FullMessageName() : ::absl::string_view$
+        +GetCachedSize() : [const] int
+        #GetClassData() : [const] const ::google::protobuf::MessageLite::ClassData *
+        +GetDescriptor() : const ::google::protobuf::Descriptor *$
+        +GetMetadata() : [const] ::google::protobuf::Metadata
+        +GetReflection() : const ::google::protobuf::Reflection *$
+        -InternalSwap(Test * other) : void
+        +IsInitialized() : [const] bool
+        +MergeFrom(const Test & from) : void
+        -MergeImpl(google::protobuf::MessageLite & to_msg, const ::google::protobuf::MessageLite & from_msg) : void$
+        +New(google::protobuf::Arena * arena = nullptr) : [const] Test *
+        -SharedCtor(google::protobuf::Arena * arena) : void
+        -SharedDtor() : void
+        +Swap(Test * other) : void
+        +UnsafeArenaSwap(Test * other) : void
+        +_InternalParse(const char * ptr, google::protobuf::internal::ParseContext * ctx) : const char *
+        +_InternalSerialize(uint8_t * target, google::protobuf::io::EpsCopyOutputStream * stream) : [const] ::uint8_t *
+        -_internal_id() : [const] ::int32_t
+        -_internal_mutable_str() : std::string *
+        -_internal_set_id(int32_t value) : void
+        -_internal_set_str(const std::string & value) : void
+        -_internal_str() : [const] const std::string &
+        +clear_id() : void
+        +clear_str() : void
+        +default_instance() : const Test &$
+        +descriptor() : const ::google::protobuf::Descriptor *$
+        +has_id() : [const] bool
+        +has_str() : [const] bool
+        +id() : [const] ::int32_t
+        +internal_default_instance() : const Test *$
+        +mutable_str() : std::string *
+        +mutable_unknown_fields() : ::google::protobuf::UnknownFieldSet *
+        +release_str() : std::string *
+        +set_allocated_str(std::string * value) : void
+        +set_id(int32_t value) : void
+        +set_str<Arg_=const std::string &,Args_...>(Arg_ && arg, Args_... args) : void
+        +str() : [const] const std::string &
+        +unknown_fields() : [const] const ::google::protobuf::UnknownFieldSet &
+        - : Test::&lpar;&rpar;
+        -_table_ : const ::google::protobuf::internal::TcParseTable&lt;1,2,0,25,2&gt;
+        +kIdFieldNumber : enum
+        +kIndexInFileMessages : const int
+        +kStrFieldNumber : enum
+    }
+    class C_0000301408383510483355["Test::Impl_"]
+    class C_0000301408383510483355 {
+        +Impl_(google::protobuf::internal::ConstantInitialized) : [constexpr] void
+        +Impl_(google::protobuf::internal::InternalVisibility visibility, google::protobuf::Arena * arena) : void
+        +Impl_(google::protobuf::internal::InternalVisibility visibility, google::protobuf::Arena * arena, const Impl_ & from) : void
+        +_cached_size_ : ::google::protobuf::internal::CachedSize
+        +_has_bits_ : ::google::protobuf::internal::HasBits&lt;1&gt;
+        +id_ : ::int32_t
+        +str_ : ::google::protobuf::internal::ArenaStringPtr
+    }
+    class C_0002004998428684284345["Test::&lpar;&rpar;"]
+    class C_0002004998428684284345 {
+        +_impl_ : Impl_
+    }
+    class C_0000969401458088242992["Test::_Internal"]
+    class C_0000969401458088242992 {
+    }
+    class C_0001381264346604786731["TestDefaultTypeInternal"]
+    class C_0001381264346604786731 {
+    }
+    C_0000368255071736256037 ..> C_0001772138383063081990 : 
+    C_0000413225465354068283 o-- C_0001772138383063081990 : -queue
+    C_0000413225465354068283 ()-- C_0001851961472811287418 : 
+    C_0002079222692820923786 --> C_0000413225465354068283 : -wq
+    C_0002079222692820923786 o-- C_0000744513698636528658 : -state
+    C_0002079222692820923786 o-- C_0001772138383063081990 : -rxdFrame
+    C_0002079222692820923786 ()-- C_0000744513698636528658 : 
+    C_0002016596168367621613 ..> C_0001772138383063081990 : 
+    C_0000521409481286509234 ..> C_0001772138383063081990 : 
+    C_0001013167965629105335 ..> C_0000159043066032490316 : 
+    C_0001013167965629105335 ..> C_0000521409481286509234 : 
+    C_0001013167965629105335 ..> C_0001108562568155713252 : 
+    C_0000159043066032490316 ..> C_0001772138383063081990 : 
+    C_0000159043066032490316 --> C_0002016596168367621613 : -io
+    C_0000159043066032490316 --> C_0000099517403415114378 : -serverInstance
+    C_0000159043066032490316 --> C_0001108562568155713252 : -state
+    C_0000159043066032490316 --> C_0001013167965629105335 : +finalStateFactory
+    C_0001108562568155713252 ..> C_0001772138383063081990 : 
+    C_0001108562568155713252 --> C_0000159043066032490316 : #ctx
+    C_0000125432330192061577 ..> C_0001772138383063081990 : 
+    C_0000125432330192061577 ..> C_0000159043066032490316 : 
+    C_0000125432330192061577 --> C_0000521409481286509234 : -coder
+    C_0001108562568155713252 <|-- C_0000125432330192061577
+    C_0000099517403415114378 --> C_0000937459447376874050 : -worker
+    C_0000099517403415114378 --> C_0000704468137843898889 : -authenticator
+    C_0000099517403415114378 o-- C_0000413225465354068283 : -wqIn
+    C_0000099517403415114378 o-- C_0000413225465354068283 : -wqOut
+    C_0000099517403415114378 o-- C_0000439368331391122494 : -fdInfoTable
+    C_0000099517403415114378 --> C_0001013167965629105335 : -userHandlerFactory
+    C_0000421220929588781000 ..> C_0000159043066032490316 : 
+    C_0000421220929588781000 ..> C_0001772138383063081990 : 
+    C_0000421220929588781000 --> C_0000521409481286509234 : -coder
+    C_0001108562568155713252 <|-- C_0000421220929588781000
+    C_0000937459447376874050 --> C_0000413225465354068283 : -wqIn
+    C_0000937459447376874050 --> C_0000413225465354068283 : -wqOut
+    C_0000937459447376874050 --> C_0000159043066032490316 : -handlerTable
+    C_0000937459447376874050 --> C_0001013167965629105335 : -userHandlerFactory
+    C_0000937459447376874050 --> C_0000099517403415114378 : -serverInstance
+    C_0000937459447376874050 ()-- C_0001815292306860725455 : 
+    C_0001815292306860725455 ..> C_0001772138383063081990 : 
+    C_0001815292306860725455 --> C_0000413225465354068283 : -q
+    C_0002016596168367621613 <|-- C_0001815292306860725455
+    C_0000905078507790989285 o-- C_0000032890696926555652 : -state
+    C_0000905078507790989285 o-- C_0001772138383063081990 : -txdFrame
+    C_0000905078507790989285 ()-- C_0000032890696926555652 : 
+    C_0001399992001799140315 <|-- C_0001669769533097337270
+    C_0001399992001799140315 <|-- C_0000282408967583958009
+    C_0002154100137202431943 --> C_0001399992001799140315 : +supportedAuths
+    C_0000704468137843898889 ..> C_0001399992001799140315 : 
+    C_0000704468137843898889 o-- C_0002154100137202431943 : -userTable
+    C_0000439368331391122494 ..> C_0000413225465354068283 : 
+    C_0000439368331391122494 o-- C_0002079222692820923786 : +framer
+    C_0000439368331391122494 o-- C_0000905078507790989285 : +deframer
+    C_0000970574400319610151 ..> C_0000159043066032490316 : 
+    C_0000970574400319610151 ..> C_0000521409481286509234 : 
+    C_0000970574400319610151 ..> C_0001108562568155713252 : 
+    C_0001013167965629105335 <|-- C_0000970574400319610151
+    C_0001080990835532108106 ..> C_0000159043066032490316 : 
+    C_0001080990835532108106 ..> C_0000521409481286509234 : 
+    C_0001080990835532108106 ..> C_0001108562568155713252 : 
+    C_0001013167965629105335 <|-- C_0001080990835532108106
+    C_0000788431645964313302 ..|> C_0000125432330192061577 : 
+    C_0001887797911965546684 ..> C_0000159043066032490316 : 
+    C_0001887797911965546684 ..> C_0000521409481286509234 : 
+    C_0000788431645964313302 <|-- C_0001887797911965546684
+    C_0001557316170505719203 ..> C_0000159043066032490316 : 
+    C_0001557316170505719203 ..> C_0001772138383063081990 : 
+    C_0001557316170505719203 --> C_0000521409481286509234 : -coder
+    C_0001108562568155713252 <|-- C_0001557316170505719203
+    C_0001852152343959166745 ..> C_0001772138383063081990 : 
+    C_0000521409481286509234 <|-- C_0001852152343959166745
+    C_0000072811412987537340 ..> C_0001772138383063081990 : 
+    C_0000368255071736256037 <|-- C_0000072811412987537340
+    C_0001106453201833708579 --> C_0000368255071736256037 : -io
+    C_0001106453201833708579 --> C_0000521409481286509234 : -coder
+    C_0001613713295908831163 o-- C_0002004998428684284345 : 
+    C_0001613713295908831163 ()-- C_0000301408383510483355 : 
+    C_0001613713295908831163 ()-- C_0000969401458088242992 : 
+
+%% Generated with clang-uml, version 0.5.2-31-ge21c2d2
+%% LLVM version clang version 16.0.6 (Fedora 16.0.6-4.fc38)
