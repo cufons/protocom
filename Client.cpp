@@ -23,6 +23,19 @@ namespace protocom {
     bool Client::connect_sock(int socketTimeout) {
         if(isConnected) return true;
         fd = socket(AF_INET,SOCK_STREAM,0);
+        struct timeval timeout;
+        timeout.tv_sec = 10;
+        timeout.tv_usec = 0;
+
+        if (setsockopt (fd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof timeout) < 0) {
+            perror("setsockopt failed");
+            return false;
+        }
+
+        if (setsockopt (fd, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof timeout) < 0) {
+            perror("setsockopt failed");
+            return false;
+        }
         if(fd == -1 || ::connect(fd, reinterpret_cast<const sockaddr *>(&remAddr), sizeof(remAddr))) {
             return false;
         }
@@ -49,7 +62,9 @@ namespace protocom {
 
     bool Client::sendMsg(const MessageLite &msg) {
         PFrame f{};
-        if(!(coder->encode(f,msg) && io->writeFrame(f)))return false;
+        if(!(coder->encode(f,msg) && io->writeFrame(f))) {
+            return false;
+        }
         return true;
     }
 
@@ -77,14 +92,22 @@ namespace protocom {
             return false;
         }
         if(resp.kex().alg() != KexMsg_KexAlg_KEX_ECDH || !kexProto.loadOtherKeyArr(reinterpret_cast<const unsigned char *>(resp.kex().pkey().data()), resp.kex().pkey().size())
-        || !kexProto.agree()) return false;
+        || !kexProto.agree()){
+            std::cout << "[Client::connect] Failed to load key or agree" << std::endl;
+            return false;
+        }
 
         SecByteBlock agreedKey(32);
 
-        if(!kexProto.getKey256(agreedKey)) return false;
-
-        coder = new EncrMessageCoder(agreedKey);
-
+        if(!kexProto.getKey256(agreedKey)) {
+            std::cout << "[Client::connect] Failed to get shared key" << std::endl;
+        };
+        SecByteBlock iv;
+        iv.Assign(reinterpret_cast<const unsigned char *>(resp.iv().data()), resp.iv().length());
+        //auto mcoder = new EncrMessageCoder(agreedKey,iv);
+        auto mcoder = new EncrMessageCoder(agreedKey);
+        delete coder;
+        coder = mcoder;
         req.Clear();
         req.set_type(ClientConnectedStateRequest_RequestType_REQUEST_AUTH);
         if(!sendMsg(req))return false;
@@ -95,17 +118,7 @@ namespace protocom {
             return false;
         }
 
-        ClientAuthRequest authr;
-        authr.set_request(ClientAuthRequest_RequestType_AUTH_SUPPLY);
-        if(!sendMsg(authr))return false;
-
-        ServerAuthResponse authResponse;
-        if(!fetchMsg(authResponse)) return false;
-        if(authResponse.status() != ServerAuthResponse_ResponseStatus_AUTH_ACCEPT) {
-            dump_error(resp);
-            return false;
-        }
-
+        isConnected = true;
         return true;
     }
 
@@ -117,6 +130,34 @@ namespace protocom {
         if(!sendMsg(req)) return false;
         if(!fetchMsg(resp)) return false;
         return true;
+    }
+
+    bool Client::authenticate(const std::string& username, const std::string& password) {
+        ClientAuthRequest authr;
+        authr.set_request(ClientAuthRequest_RequestType_AUTH_SUPPLY);
+        authr.mutable_username()->append(username);
+        authr.mutable_authcredential()->append(password);
+        if(!sendMsg(authr))return false;
+
+        ServerAuthResponse authResponse;
+        if(!fetchMsg(authResponse)) return false;
+        if(authResponse.status() != ServerAuthResponse_ResponseStatus_AUTH_ACCEPT) {
+            return false;
+        }
+        isAuthenticated = true;
+        return true;
+    }
+
+    bool Client::hasConnected() const {
+        return isConnected;
+    }
+
+    bool Client::hasAuthenticated() const {
+        return isAuthenticated;
+    }
+
+    bool Client::hasServerClosed() const {
+        return io->isEOF();
     }
 
 } // protocom

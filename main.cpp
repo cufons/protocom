@@ -13,7 +13,7 @@
 #include <csignal>
 
 void runClientTest() {
-    protocom::Client c("10.1.0.10", 4444);
+    protocom::Client c("127.0.0.1", 4444);
     if(c.connect()) {
         std::cout << "Connected!!" << std::endl;
     } else {
@@ -79,6 +79,7 @@ int main(int argc,char** argv) {
         printf("%02x ",testframe.msg[i]);
     }
     std::cout << std::endl;
+    std::cout << "Message coding test complete!" << std::endl;
     protocom::Test decrt;
 
     if (!coder.decode(testframe,decrt)) {
@@ -108,6 +109,7 @@ int main(int argc,char** argv) {
     std::cout << "shared(B): ";
     CryptoPP::StringSource(keyb,keyb.size(), true,new CryptoPP::Redirector(enc));
     std::cout << std::endl;
+    std::cout << "Key agreement test complete!" << std::endl;
     srv = new protocom::Server("0.0.0.0",4444);
     //protocom::Server s("0.0.0.0",4444);
     srv->setUserHandlerFactory(new protocom::TestUserHandlerFactory());

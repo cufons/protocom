@@ -19,11 +19,19 @@ namespace protocom {
         GCM<AES>::Encryption encr;
         SecByteBlock key;
         SecByteBlock init_iv;
+    public:
+        void setIV(const SecByteBlock &iv);
+
+    public:
+        const SecByteBlock &getIV() const;
+
+    private:
         const size_t ivsize;
         CryptoPP::HexEncoder enc;
     public:
         EncrMessageCoder();
         explicit EncrMessageCoder(SecByteBlock& key);
+        EncrMessageCoder(SecByteBlock& key,SecByteBlock& iv);
         bool decode(const PFrame &frame, MessageLite& msg) override;
         bool encode(PFrame& frame, const MessageLite &msg) override;
     };

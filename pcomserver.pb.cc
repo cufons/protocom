@@ -22,8 +22,6 @@ namespace _fl = ::google::protobuf::internal::field_layout;
 inline constexpr ServerAuthResponse::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        method_{},
-        _method_cached_byte_size_{0},
         serverinfo_(
             &::google::protobuf::internal::fixed_address_empty_string,
             ::_pbi::ConstantInitialized()),
@@ -67,8 +65,14 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 
 inline constexpr ClientAuthRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
-      : request_{static_cast< ::ClientAuthRequest_RequestType >(0)},
-        _cached_size_{0} {}
+      : _cached_size_{0},
+        username_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        authcredential_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        request_{static_cast< ::ClientAuthRequest_RequestType >(0)} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR ClientAuthRequest::ClientAuthRequest(::_pbi::ConstantInitialized)
@@ -87,6 +91,9 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 inline constexpr ServerConnectedStateResponse::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
+        iv_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
         kex_{nullptr},
         status_{static_cast< ::ServerConnectedStateResponse_ResponseStatus >(0)} {}
 
@@ -450,68 +457,6 @@ constexpr ServerAuthResponse_ResponseStatus ServerAuthResponse::DECODE_ERROR;
 constexpr ServerAuthResponse_ResponseStatus ServerAuthResponse::ResponseStatus_MIN;
 constexpr ServerAuthResponse_ResponseStatus ServerAuthResponse::ResponseStatus_MAX;
 constexpr int ServerAuthResponse::ResponseStatus_ARRAYSIZE;
-
-#endif  // (__cplusplus < 201703) &&
-        // (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
-PROTOBUF_CONSTINIT const uint32_t ServerAuthResponse_AuthMethod_internal_data_[] = {
-    196608u, 0u, };
-bool ServerAuthResponse_AuthMethod_IsValid(int value) {
-  return 0 <= value && value <= 2;
-}
-static ::google::protobuf::internal::ExplicitlyConstructed<std::string>
-    ServerAuthResponse_AuthMethod_strings[3] = {};
-
-static const char ServerAuthResponse_AuthMethod_names[] = {
-    "AUTH_CHALLENGE"
-    "AUTH_KEY"
-    "AUTH_UNKNOWN"
-};
-
-static const ::google::protobuf::internal::EnumEntry ServerAuthResponse_AuthMethod_entries[] =
-    {
-        {{&ServerAuthResponse_AuthMethod_names[0], 14}, 1},
-        {{&ServerAuthResponse_AuthMethod_names[14], 8}, 2},
-        {{&ServerAuthResponse_AuthMethod_names[22], 12}, 0},
-};
-
-static const int ServerAuthResponse_AuthMethod_entries_by_number[] = {
-    2,  // 0 -> AUTH_UNKNOWN
-    0,  // 1 -> AUTH_CHALLENGE
-    1,  // 2 -> AUTH_KEY
-};
-
-const std::string& ServerAuthResponse_AuthMethod_Name(ServerAuthResponse_AuthMethod value) {
-  static const bool kDummy =
-      ::google::protobuf::internal::InitializeEnumStrings(
-          ServerAuthResponse_AuthMethod_entries, ServerAuthResponse_AuthMethod_entries_by_number,
-          3, ServerAuthResponse_AuthMethod_strings);
-  (void)kDummy;
-
-  int idx = ::google::protobuf::internal::LookUpEnumName(
-      ServerAuthResponse_AuthMethod_entries, ServerAuthResponse_AuthMethod_entries_by_number, 3,
-      value);
-  return idx == -1 ? ::google::protobuf::internal::GetEmptyString()
-                   : ServerAuthResponse_AuthMethod_strings[idx].get();
-}
-
-bool ServerAuthResponse_AuthMethod_Parse(absl::string_view name, ServerAuthResponse_AuthMethod* value) {
-  int int_value;
-  bool success = ::google::protobuf::internal::LookUpEnumValue(
-      ServerAuthResponse_AuthMethod_entries, 3, name, &int_value);
-  if (success) {
-    *value = static_cast<ServerAuthResponse_AuthMethod>(int_value);
-  }
-  return success;
-}
-#if (__cplusplus < 201703) && \
-  (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
-
-constexpr ServerAuthResponse_AuthMethod ServerAuthResponse::AUTH_UNKNOWN;
-constexpr ServerAuthResponse_AuthMethod ServerAuthResponse::AUTH_CHALLENGE;
-constexpr ServerAuthResponse_AuthMethod ServerAuthResponse::AUTH_KEY;
-constexpr ServerAuthResponse_AuthMethod ServerAuthResponse::AuthMethod_MIN;
-constexpr ServerAuthResponse_AuthMethod ServerAuthResponse::AuthMethod_MAX;
-constexpr int ServerAuthResponse::AuthMethod_ARRAYSIZE;
 
 #endif  // (__cplusplus < 201703) &&
         // (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
@@ -1013,7 +958,8 @@ inline PROTOBUF_NDEBUG_INLINE ServerConnectedStateResponse::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
     const Impl_& from)
       : _has_bits_{from._has_bits_},
-        _cached_size_{0} {}
+        _cached_size_{0},
+        iv_(arena, from.iv_) {}
 
 ServerConnectedStateResponse::ServerConnectedStateResponse(
     ::google::protobuf::Arena* arena,
@@ -1025,7 +971,7 @@ ServerConnectedStateResponse::ServerConnectedStateResponse(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
   ::uint32_t cached_has_bits = _impl_._has_bits_[0];
-  _impl_.kex_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::MessageLite::CopyConstruct<::KexMsg>(
+  _impl_.kex_ = (cached_has_bits & 0x00000002u) ? ::google::protobuf::MessageLite::CopyConstruct<::KexMsg>(
                               arena, *from._impl_.kex_)
                         : nullptr;
   _impl_.status_ = from._impl_.status_;
@@ -1035,7 +981,8 @@ ServerConnectedStateResponse::ServerConnectedStateResponse(
 inline PROTOBUF_NDEBUG_INLINE ServerConnectedStateResponse::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
-      : _cached_size_{0} {}
+      : _cached_size_{0},
+        iv_(arena) {}
 
 inline void ServerConnectedStateResponse::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
@@ -1053,6 +1000,7 @@ ServerConnectedStateResponse::~ServerConnectedStateResponse() {
 }
 inline void ServerConnectedStateResponse::SharedDtor() {
   ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.iv_.Destroy();
   delete _impl_.kex_;
   _impl_.~Impl_();
 }
@@ -1083,9 +1031,14 @@ PROTOBUF_NOINLINE void ServerConnectedStateResponse::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    ABSL_DCHECK(_impl_.kex_ != nullptr);
-    _impl_.kex_->Clear();
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _impl_.iv_.ClearNonDefaultToEmpty();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      ABSL_DCHECK(_impl_.kex_ != nullptr);
+      _impl_.kex_->Clear();
+    }
   }
   _impl_.status_ = 0;
   _impl_._has_bits_.Clear();
@@ -1100,15 +1053,15 @@ const char* ServerConnectedStateResponse::_InternalParse(
 
 
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 2, 1, 0, 2> ServerConnectedStateResponse::_table_ = {
+const ::_pbi::TcParseTable<2, 3, 1, 0, 2> ServerConnectedStateResponse::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ServerConnectedStateResponse, _impl_._has_bits_),
     0, // no _extensions_
-    2, 8,  // max_field_number, fast_idx_mask
+    3, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967292,  // skipmap
+    4294967288,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    2,  // num_field_entries
+    3,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     &_ServerConnectedStateResponse_default_instance_._instance,
@@ -1117,12 +1070,16 @@ const ::_pbi::TcParseTable<1, 2, 1, 0, 2> ServerConnectedStateResponse::_table_ 
     ::_pbi::TcParser::GetTable<::ServerConnectedStateResponse>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // optional .KexMsg kex = 2;
-    {::_pbi::TcParser::FastMtS1,
-     {18, 0, 0, PROTOBUF_FIELD_OFFSET(ServerConnectedStateResponse, _impl_.kex_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     // .ServerConnectedStateResponse.ResponseStatus status = 1;
     {::_pbi::TcParser::FastV32S1,
      {8, 63, 0, PROTOBUF_FIELD_OFFSET(ServerConnectedStateResponse, _impl_.status_)}},
+    // optional .KexMsg kex = 2;
+    {::_pbi::TcParser::FastMtS1,
+     {18, 1, 0, PROTOBUF_FIELD_OFFSET(ServerConnectedStateResponse, _impl_.kex_)}},
+    // optional bytes iv = 3;
+    {::_pbi::TcParser::FastBS1,
+     {26, 0, 0, PROTOBUF_FIELD_OFFSET(ServerConnectedStateResponse, _impl_.iv_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -1130,8 +1087,11 @@ const ::_pbi::TcParseTable<1, 2, 1, 0, 2> ServerConnectedStateResponse::_table_ 
     {PROTOBUF_FIELD_OFFSET(ServerConnectedStateResponse, _impl_.status_), -1, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
     // optional .KexMsg kex = 2;
-    {PROTOBUF_FIELD_OFFSET(ServerConnectedStateResponse, _impl_.kex_), _Internal::kHasBitsOffset + 0, 0,
+    {PROTOBUF_FIELD_OFFSET(ServerConnectedStateResponse, _impl_.kex_), _Internal::kHasBitsOffset + 1, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // optional bytes iv = 3;
+    {PROTOBUF_FIELD_OFFSET(ServerConnectedStateResponse, _impl_.iv_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kBytes | ::_fl::kRepAString)},
   }}, {{
     {::_pbi::TcParser::GetTable<::KexMsg>()},
   }}, {{
@@ -1154,9 +1114,15 @@ const ::_pbi::TcParseTable<1, 2, 1, 0, 2> ServerConnectedStateResponse::_table_ 
 
   cached_has_bits = _impl_._has_bits_[0];
   // optional .KexMsg kex = 2;
-  if (cached_has_bits & 0x00000001u) {
+  if (cached_has_bits & 0x00000002u) {
     target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
         2, *_impl_.kex_, _impl_.kex_->GetCachedSize(), target, stream);
+  }
+
+  // optional bytes iv = 3;
+  if (cached_has_bits & 0x00000001u) {
+    const std::string& _s = this->_internal_iv();
+    target = stream->WriteBytesMaybeAliased(3, _s, target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1176,13 +1142,21 @@ const ::_pbi::TcParseTable<1, 2, 1, 0, 2> ServerConnectedStateResponse::_table_ 
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // optional .KexMsg kex = 2;
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    total_size +=
-        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kex_);
-  }
+  if (cached_has_bits & 0x00000003u) {
+    // optional bytes iv = 3;
+    if (cached_has_bits & 0x00000001u) {
+      total_size += 1 + ::google::protobuf::internal::WireFormatLite::BytesSize(
+                                      this->_internal_iv());
+    }
 
+    // optional .KexMsg kex = 2;
+    if (cached_has_bits & 0x00000002u) {
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kex_);
+    }
+
+  }
   // .ServerConnectedStateResponse.ResponseStatus status = 1;
   if (this->_internal_status() != 0) {
     total_size += 1 +
@@ -1211,13 +1185,18 @@ void ServerConnectedStateResponse::MergeFrom(const ServerConnectedStateResponse&
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    ABSL_DCHECK(from._impl_.kex_ != nullptr);
-    if (_this->_impl_.kex_ == nullptr) {
-      _this->_impl_.kex_ =
-          ::google::protobuf::MessageLite::CopyConstruct<::KexMsg>(arena, *from._impl_.kex_);
-    } else {
-      _this->_impl_.kex_->MergeFrom(*from._impl_.kex_);
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_internal_set_iv(from._internal_iv());
+    }
+    if (cached_has_bits & 0x00000002u) {
+      ABSL_DCHECK(from._impl_.kex_ != nullptr);
+      if (_this->_impl_.kex_ == nullptr) {
+        _this->_impl_.kex_ =
+            ::google::protobuf::MessageLite::CopyConstruct<::KexMsg>(arena, *from._impl_.kex_);
+      } else {
+        _this->_impl_.kex_->MergeFrom(*from._impl_.kex_);
+      }
     }
   }
   if (from._internal_status() != 0) {
@@ -1240,8 +1219,11 @@ PROTOBUF_NOINLINE bool ServerConnectedStateResponse::IsInitialized() const {
 
 void ServerConnectedStateResponse::InternalSwap(ServerConnectedStateResponse* PROTOBUF_RESTRICT other) {
   using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.iv_, &other->_impl_.iv_, arena);
   ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(ServerConnectedStateResponse, _impl_.status_)
       + sizeof(ServerConnectedStateResponse::_impl_.status_)
@@ -1254,6 +1236,9 @@ void ServerConnectedStateResponse::InternalSwap(ServerConnectedStateResponse* PR
 
 class ClientAuthRequest::_Internal {
  public:
+  using HasBits = decltype(std::declval<ClientAuthRequest>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+    8 * PROTOBUF_FIELD_OFFSET(ClientAuthRequest, _impl_._has_bits_);
 };
 
 ClientAuthRequest::ClientAuthRequest(::google::protobuf::Arena* arena)
@@ -1261,15 +1246,33 @@ ClientAuthRequest::ClientAuthRequest(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:ClientAuthRequest)
 }
+inline PROTOBUF_NDEBUG_INLINE ClientAuthRequest::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        username_(arena, from.username_),
+        authcredential_(arena, from.authcredential_) {}
+
 ClientAuthRequest::ClientAuthRequest(
-    ::google::protobuf::Arena* arena, const ClientAuthRequest& from)
-    : ClientAuthRequest(arena) {
-  MergeFrom(from);
+    ::google::protobuf::Arena* arena,
+    const ClientAuthRequest& from)
+    : ::google::protobuf::MessageLite(arena) {
+  ClientAuthRequest* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<std::string>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  _impl_.request_ = from._impl_.request_;
+
+  // @@protoc_insertion_point(copy_constructor:ClientAuthRequest)
 }
 inline PROTOBUF_NDEBUG_INLINE ClientAuthRequest::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
-      : _cached_size_{0} {}
+      : _cached_size_{0},
+        username_(arena),
+        authcredential_(arena) {}
 
 inline void ClientAuthRequest::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
@@ -1282,6 +1285,8 @@ ClientAuthRequest::~ClientAuthRequest() {
 }
 inline void ClientAuthRequest::SharedDtor() {
   ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.username_.Destroy();
+  _impl_.authcredential_.Destroy();
   _impl_.~Impl_();
 }
 
@@ -1310,7 +1315,17 @@ PROTOBUF_NOINLINE void ClientAuthRequest::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _impl_.username_.ClearNonDefaultToEmpty();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _impl_.authcredential_.ClearNonDefaultToEmpty();
+    }
+  }
   _impl_.request_ = 0;
+  _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<std::string>();
 }
 
@@ -1322,15 +1337,15 @@ const char* ClientAuthRequest::_InternalParse(
 
 
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 1, 0, 0, 2> ClientAuthRequest::_table_ = {
+const ::_pbi::TcParseTable<2, 3, 0, 34, 2> ClientAuthRequest::_table_ = {
   {
-    0,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(ClientAuthRequest, _impl_._has_bits_),
     0, // no _extensions_
-    1, 0,  // max_field_number, fast_idx_mask
+    3, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967294,  // skipmap
+    4294967288,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    1,  // num_field_entries
+    3,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     &_ClientAuthRequest_default_instance_._instance,
@@ -1339,18 +1354,34 @@ const ::_pbi::TcParseTable<0, 1, 0, 0, 2> ClientAuthRequest::_table_ = {
     ::_pbi::TcParser::GetTable<::ClientAuthRequest>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
+    {::_pbi::TcParser::MiniParse, {}},
     // .ClientAuthRequest.RequestType request = 1;
     {::_pbi::TcParser::FastV32S1,
      {8, 63, 0, PROTOBUF_FIELD_OFFSET(ClientAuthRequest, _impl_.request_)}},
+    // optional string username = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 0, 0, PROTOBUF_FIELD_OFFSET(ClientAuthRequest, _impl_.username_)}},
+    // optional bytes authCredential = 3;
+    {::_pbi::TcParser::FastBS1,
+     {26, 1, 0, PROTOBUF_FIELD_OFFSET(ClientAuthRequest, _impl_.authcredential_)}},
   }}, {{
     65535, 65535
   }}, {{
     // .ClientAuthRequest.RequestType request = 1;
-    {PROTOBUF_FIELD_OFFSET(ClientAuthRequest, _impl_.request_), 0, 0,
+    {PROTOBUF_FIELD_OFFSET(ClientAuthRequest, _impl_.request_), -1, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
+    // optional string username = 2;
+    {PROTOBUF_FIELD_OFFSET(ClientAuthRequest, _impl_.username_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // optional bytes authCredential = 3;
+    {PROTOBUF_FIELD_OFFSET(ClientAuthRequest, _impl_.authcredential_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kBytes | ::_fl::kRepAString)},
   }},
   // no aux_entries
   {{
+    "\21\0\10\0\0\0\0\0"
+    "ClientAuthRequest"
+    "username"
   }},
 };
 
@@ -1366,6 +1397,21 @@ const ::_pbi::TcParseTable<0, 1, 0, 0, 2> ClientAuthRequest::_table_ = {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteEnumToArray(
         1, this->_internal_request(), target);
+  }
+
+  cached_has_bits = _impl_._has_bits_[0];
+  // optional string username = 2;
+  if (cached_has_bits & 0x00000001u) {
+    const std::string& _s = this->_internal_username();
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "ClientAuthRequest.username");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  // optional bytes authCredential = 3;
+  if (cached_has_bits & 0x00000002u) {
+    const std::string& _s = this->_internal_authcredential();
+    target = stream->WriteBytesMaybeAliased(3, _s, target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1385,6 +1431,21 @@ const ::_pbi::TcParseTable<0, 1, 0, 0, 2> ClientAuthRequest::_table_ = {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    // optional string username = 2;
+    if (cached_has_bits & 0x00000001u) {
+      total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                                      this->_internal_username());
+    }
+
+    // optional bytes authCredential = 3;
+    if (cached_has_bits & 0x00000002u) {
+      total_size += 1 + ::google::protobuf::internal::WireFormatLite::BytesSize(
+                                      this->_internal_authcredential());
+    }
+
+  }
   // .ClientAuthRequest.RequestType request = 1;
   if (this->_internal_request() != 0) {
     total_size += 1 +
@@ -1411,9 +1472,19 @@ void ClientAuthRequest::MergeFrom(const ClientAuthRequest& from) {
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_internal_set_username(from._internal_username());
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_internal_set_authcredential(from._internal_authcredential());
+    }
+  }
   if (from._internal_request() != 0) {
     _this->_impl_.request_ = from._impl_.request_;
   }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
   _this->_internal_metadata_.MergeFrom<std::string>(from._internal_metadata_);
 }
 
@@ -1430,7 +1501,12 @@ PROTOBUF_NOINLINE bool ClientAuthRequest::IsInitialized() const {
 
 void ClientAuthRequest::InternalSwap(ClientAuthRequest* PROTOBUF_RESTRICT other) {
   using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.username_, &other->_impl_.username_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.authcredential_, &other->_impl_.authcredential_, arena);
   swap(_impl_.request_, other->_impl_.request_);
 }
 
@@ -1453,8 +1529,6 @@ inline PROTOBUF_NDEBUG_INLINE ServerAuthResponse::Impl_::Impl_(
     const Impl_& from)
       : _has_bits_{from._has_bits_},
         _cached_size_{0},
-        method_{visibility, arena, from.method_},
-        _method_cached_byte_size_{0},
         serverinfo_(arena, from.serverinfo_) {}
 
 ServerAuthResponse::ServerAuthResponse(
@@ -1474,8 +1548,6 @@ inline PROTOBUF_NDEBUG_INLINE ServerAuthResponse::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
       : _cached_size_{0},
-        method_{visibility, arena},
-        _method_cached_byte_size_{0},
         serverinfo_(arena) {}
 
 inline void ServerAuthResponse::SharedCtor(::_pb::Arena* arena) {
@@ -1518,7 +1590,6 @@ PROTOBUF_NOINLINE void ServerAuthResponse::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.method_.Clear();
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
     _impl_.serverinfo_.ClearNonDefaultToEmpty();
@@ -1536,15 +1607,15 @@ const char* ServerAuthResponse::_InternalParse(
 
 
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 0, 37, 2> ServerAuthResponse::_table_ = {
+const ::_pbi::TcParseTable<1, 2, 0, 37, 2> ServerAuthResponse::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ServerAuthResponse, _impl_._has_bits_),
     0, // no _extensions_
-    3, 24,  // max_field_number, fast_idx_mask
+    2, 8,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
+    4294967292,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
+    2,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     &_ServerAuthResponse_default_instance_._instance,
@@ -1553,16 +1624,12 @@ const ::_pbi::TcParseTable<2, 3, 0, 37, 2> ServerAuthResponse::_table_ = {
     ::_pbi::TcParser::GetTable<::ServerAuthResponse>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    {::_pbi::TcParser::MiniParse, {}},
-    // .ServerAuthResponse.ResponseStatus status = 1;
-    {::_pbi::TcParser::FastV32S1,
-     {8, 63, 0, PROTOBUF_FIELD_OFFSET(ServerAuthResponse, _impl_.status_)}},
     // optional string serverInfo = 2;
     {::_pbi::TcParser::FastUS1,
      {18, 0, 0, PROTOBUF_FIELD_OFFSET(ServerAuthResponse, _impl_.serverinfo_)}},
-    // repeated .ServerAuthResponse.AuthMethod method = 3;
-    {::_pbi::TcParser::FastV32P1,
-     {26, 63, 0, PROTOBUF_FIELD_OFFSET(ServerAuthResponse, _impl_.method_)}},
+    // .ServerAuthResponse.ResponseStatus status = 1;
+    {::_pbi::TcParser::FastV32S1,
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(ServerAuthResponse, _impl_.status_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -1572,9 +1639,6 @@ const ::_pbi::TcParseTable<2, 3, 0, 37, 2> ServerAuthResponse::_table_ = {
     // optional string serverInfo = 2;
     {PROTOBUF_FIELD_OFFSET(ServerAuthResponse, _impl_.serverinfo_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
-    // repeated .ServerAuthResponse.AuthMethod method = 3;
-    {PROTOBUF_FIELD_OFFSET(ServerAuthResponse, _impl_.method_), -1, 0,
-    (0 | ::_fl::kFcRepeated | ::_fl::kPackedOpenEnum)},
   }},
   // no aux_entries
   {{
@@ -1607,15 +1671,6 @@ const ::_pbi::TcParseTable<2, 3, 0, 37, 2> ServerAuthResponse::_table_ = {
     target = stream->WriteStringMaybeAliased(2, _s, target);
   }
 
-  // repeated .ServerAuthResponse.AuthMethod method = 3;
-  {
-    std::size_t byte_size = _impl_._method_cached_byte_size_.Get();
-    if (byte_size > 0) {
-      target = stream->WriteEnumPacked(3, _internal_method(),
-                                       byte_size, target);
-    }
-  }
-
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = stream->WriteRaw(
         _internal_metadata_.unknown_fields<std::string>(::google::protobuf::internal::GetEmptyString).data(),
@@ -1633,23 +1688,6 @@ const ::_pbi::TcParseTable<2, 3, 0, 37, 2> ServerAuthResponse::_table_ = {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .ServerAuthResponse.AuthMethod method = 3;
-  {
-    std::size_t data_size = 0;
-    auto count = static_cast<std::size_t>(this->_internal_method_size());
-
-    for (std::size_t i = 0; i < count; ++i) {
-      data_size += ::_pbi::WireFormatLite::EnumSize(
-          this->_internal_method().Get(static_cast<int>(i)));
-    }
-    total_size += data_size;
-    if (data_size > 0) {
-      total_size += 1;
-      total_size += ::_pbi::WireFormatLite::Int32Size(
-          static_cast<int32_t>(data_size));
-    }
-    _impl_._method_cached_byte_size_.Set(::_pbi::ToCachedSize(data_size));
-  }
   // optional string serverInfo = 2;
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
@@ -1683,7 +1721,6 @@ void ServerAuthResponse::MergeFrom(const ServerAuthResponse& from) {
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  _this->_internal_mutable_method()->MergeFrom(from._internal_method());
   cached_has_bits = from._impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
     _this->_internal_set_serverinfo(from._internal_serverinfo());
@@ -1712,7 +1749,6 @@ void ServerAuthResponse::InternalSwap(ServerAuthResponse* PROTOBUF_RESTRICT othe
   ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  _impl_.method_.InternalSwap(&other->_impl_.method_);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.serverinfo_, &other->_impl_.serverinfo_, arena);
   swap(_impl_.status_, other->_impl_.status_);
 }

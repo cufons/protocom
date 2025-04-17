@@ -67,10 +67,16 @@ namespace protocom {
             respWithStatus(ServerConnectedStateResponse_ResponseStatus_REQUEST_ERROR);
             return;
         }
-        respWithStatus(ServerConnectedStateResponse_ResponseStatus_OK);
+
         isKexComplete = true;
+
+        auto mcoder = new EncrMessageCoder(agreed_key);
+
+        //auto iv = mcoder->getIV();
+        //response->mutable_iv()->append(reinterpret_cast<char*>(iv.data()),iv.size());
+        respWithStatus(ServerConnectedStateResponse_ResponseStatus_OK);
         delete coder;
-        coder = new EncrMessageCoder(agreed_key);
+        coder = mcoder;
     }
 
     void ProtocolConnectedHandler::handleAuthRequest() {

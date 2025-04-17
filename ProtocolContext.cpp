@@ -6,12 +6,13 @@
 #include "protocom/ProtocolConnectedHandler.h"
 
 namespace protocom {
-    ProtocolContext::ProtocolContext(ProtocolUserHandlerFactory &finalStateFactory, Server &serverInstance)
+    ProtocolContext::ProtocolContext(ProtocolUserHandlerFactory *finalStateFactory, Server &serverInstance)
             : io(nullptr), finalStateFactory(finalStateFactory), serverInstance(serverInstance) {
         state = new ProtocolConnectedHandler(*this);
     }
 
     ProtocolContext::~ProtocolContext() {
+        delete io;
         delete state;
     }
 
@@ -21,17 +22,20 @@ namespace protocom {
     }
 
     void ProtocolContext::setState(ProtocolStateHandler* newState) {
-        std::cout << "[ProtocolContext::setState] State changed " << typeid(*state).name() << "->" << typeid(*newState).name() << std::endl;
+        std::cout << "[ProtocolContext::setState] State changed " <<
+        (state == nullptr ? "NULL" : typeid(*state).name())
+        << "->" <<
+        (newState == nullptr ? "NULL" : typeid(*newState).name())  << std::endl;
         delete state;
         state = newState;
     }
 
-    IIOFrame &ProtocolContext::getIO() const {
+    IFrameSink &ProtocolContext::getIO() const {
         if(io == nullptr) throw std::runtime_error("IO is null");
         return *io;
     }
 
-    void ProtocolContext::setIO(IIOFrame *io) {
+    void ProtocolContext::setIO(IFrameSink *io) {
         ProtocolContext::io = io;
     }
 
@@ -42,4 +46,9 @@ namespace protocom {
     Server &ProtocolContext::getServerInstance() const {
         return serverInstance;
     }
+
+    ProtocolUserHandlerFactory *ProtocolContext::getFinalStateFactory() const {
+        return finalStateFactory;
+    }
+
 } // protocom

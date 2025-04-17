@@ -44,11 +44,10 @@ namespace protocom {
             std::cout << "[EncrMessageCoder::decode] " << e.what() << std::endl;
             return false;
         }
-        PFrame decoded_frame = {
-                .header = 0xF0,
-                .len = static_cast<uint16_t>(msgBuf.size()),
-                .msg = msgBuf.data()
-        };
+        PFrame decoded_frame;
+        decoded_frame.header = 0xF0;
+        decoded_frame.len = static_cast<uint16_t>(msgBuf.size());
+        decoded_frame.msg = msgBuf.data();
         return MessageCoder::decode(decoded_frame, msg);
     }
 
@@ -78,4 +77,4 @@ namespace protocom {
         frame.msg = msgBuf.data();
         return true;
     }
-} // protocom
+} // proto

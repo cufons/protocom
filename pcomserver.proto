@@ -32,6 +32,7 @@ message ServerConnectedStateResponse {
   }
   ResponseStatus status = 1;
   optional KexMsg kex = 2;
+  optional bytes iv = 3;
 }
 
 //Authentication phase
@@ -42,6 +43,8 @@ message ClientAuthRequest {
     AUTH_INFO = 2;
   }
   RequestType request = 1;
+  optional string username = 2;
+  optional bytes authCredential = 3;
 }
 
 message ServerAuthResponse {
@@ -53,13 +56,7 @@ message ServerAuthResponse {
     INVALID_REQUEST = 4;
     DECODE_ERROR = 5;
   }
-  enum AuthMethod {
-    AUTH_UNKNOWN = 0;
-    AUTH_CHALLENGE = 1;
-    AUTH_KEY = 2;
-  }
   ResponseStatus status = 1;
   optional string serverInfo = 2;
-  repeated AuthMethod method = 3;
 
 }

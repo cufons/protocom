@@ -16,11 +16,14 @@ namespace protocom {
         ServerAuthResponse* response;
         ClientAuthRequest* request;
         google::protobuf::Arena arena;
+        int remainingAttempts;
         void respWithStatus(ServerAuthResponse::ResponseStatus status);
-        bool fetchRequest();
+        void proceedAuth();
     public:
         ProtocolAuthenticationHandler(ProtocolContext &ctx, MessageCoder *coder);
         void handleFrame(PFrame &frame) override;
+
+        void doAuth();
     };
 
 } // protocom

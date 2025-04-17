@@ -5,29 +5,32 @@
 #ifndef PROTOCOM_PROTOCOLCONTEXT_H
 #define PROTOCOM_PROTOCOLCONTEXT_H
 
-#include "IIOFrame.h"
+#include "IFrameSink.h"
 #include "ProtocolStateHandler.h"
 #include "ProtocolUserHandlerFactory.h"
-#include "Server.h"
 
-class Server;
+
 namespace protocom {
+    class Server;
     class ProtocolStateHandler;
     class ProtocolUserHandlerFactory;
     class ProtocolContext {
         //friend class ProtocolStateHandler;
-        IIOFrame* io{};
+        IFrameSink* io{};
         Server& serverInstance;
     public:
         Server &getServerInstance() const;
-        IIOFrame &getIO() const;
-        void setIO(IIOFrame *io);
+        IFrameSink &getIO() const;
+        void setIO(IFrameSink *io);
 
     private:
         ProtocolStateHandler* state;
     public:
-        ProtocolUserHandlerFactory& finalStateFactory;
-        explicit ProtocolContext(ProtocolUserHandlerFactory &finalStateFactory, Server &serverInstance);
+        ProtocolUserHandlerFactory* finalStateFactory;
+
+        ProtocolUserHandlerFactory *getFinalStateFactory() const;
+
+        explicit ProtocolContext(ProtocolUserHandlerFactory *finalStateFactory, Server &serverInstance);
         void setState(ProtocolStateHandler* newState);
         void handleFrame(PFrame& frame);
         bool isActive();

@@ -6,7 +6,7 @@
 #define PROTOCOM_MESSAGECODER_H
 
 #include <google/protobuf/message_lite.h>
-#include "IIOFrame.h"
+#include "IFrameIO.h"
 
 using namespace google::protobuf;
 namespace protocom {

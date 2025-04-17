@@ -10,14 +10,25 @@
 #include <unistd.h>
 #include "IOFrameSocket.h"
 #include "MessageCoder.h"
-
+#include "string"
 namespace protocom {
 
     class Client {
         sockaddr_in remAddr;
         int fd;
         bool isConnected;
-        IIOFrame* io;
+        bool isAuthenticated;
+    public:
+        bool hasServerClosed() const;
+
+    public:
+        bool hasAuthenticated() const;
+
+    public:
+        bool hasConnected() const;
+
+    private:
+        IFrameIO* io;
         MessageCoder* coder;
         bool sendMsg(const MessageLite& msg);
         bool fetchMsg(MessageLite& msg);
@@ -26,6 +37,7 @@ namespace protocom {
     public:
         Client(const char* ip, uint16_t port);
         bool connect();
+        bool authenticate(const std::string& username, const std::string& password);
         bool fetchRequest(const MessageLite &req, MessageLite &resp);
         ~Client();
     };

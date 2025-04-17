@@ -60,11 +60,13 @@ namespace protocom {
         if(!nrecv) conn_open = false;
         if (nrecv == -1) {
             if(errno == EAGAIN || errno == EWOULDBLOCK) {
+                read_eagain = true;
                 return 0;
             }
-            perror("[ServerClientHandler::try_recv] recv failed");
+            perror("[ServerClientHandler::tryRecv] recv failed");
             throw std::system_error(errno, std::generic_category());
         }
+        read_eagain = false;
         return nrecv;
     }
 
@@ -74,11 +76,13 @@ namespace protocom {
         if(!nsent) conn_open = false;
         if(nsent == -1) {
             if(errno == EAGAIN || errno == EWOULDBLOCK) {
+                write_eagain = true;
                 return 0;
             }
             perror("[ServerClientHandler::try_send] send failed");
             throw std::system_error(errno, std::generic_category());
         }
+        write_eagain = false;
         return nsent;
     }
 
@@ -106,5 +110,13 @@ namespace protocom {
 
     bool IOFrameSocket::isEOF() {
         return !conn_open;
+    }
+
+    bool IOFrameSocket::isWriteExhausted() {
+        return write_eagain;
+    }
+
+    bool IOFrameSocket::isReadExhausted() {
+        return read_eagain;
     }
 } // protocom

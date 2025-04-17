@@ -1,0 +1,146 @@
+[
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/Server.cpp.o -c /home/cufon/CLionProjects/protocom/Server.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/Server.cpp",
+  "output": "CMakeFiles/protocom.dir/Server.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/IFrameIO.cpp.o -c /home/cufon/CLionProjects/protocom/IFrameIO.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/IFrameIO.cpp",
+  "output": "CMakeFiles/protocom.dir/IFrameIO.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/IOFrameSocket.cpp.o -c /home/cufon/CLionProjects/protocom/IOFrameSocket.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/IOFrameSocket.cpp",
+  "output": "CMakeFiles/protocom.dir/IOFrameSocket.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/ProtocolStateHandler.cpp.o -c /home/cufon/CLionProjects/protocom/ProtocolStateHandler.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/ProtocolStateHandler.cpp",
+  "output": "CMakeFiles/protocom.dir/ProtocolStateHandler.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/ProtocolContext.cpp.o -c /home/cufon/CLionProjects/protocom/ProtocolContext.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/ProtocolContext.cpp",
+  "output": "CMakeFiles/protocom.dir/ProtocolContext.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/ProtocolConnectedHandler.cpp.o -c /home/cufon/CLionProjects/protocom/ProtocolConnectedHandler.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/ProtocolConnectedHandler.cpp",
+  "output": "CMakeFiles/protocom.dir/ProtocolConnectedHandler.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/pcomserver.pb.cc.o -c /home/cufon/CLionProjects/protocom/pcomserver.pb.cc",
+  "file": "/home/cufon/CLionProjects/protocom/pcomserver.pb.cc",
+  "output": "CMakeFiles/protocom.dir/pcomserver.pb.cc.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/MessageCoder.cpp.o -c /home/cufon/CLionProjects/protocom/MessageCoder.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/MessageCoder.cpp",
+  "output": "CMakeFiles/protocom.dir/MessageCoder.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/x25519KexProtocol.cpp.o -c /home/cufon/CLionProjects/protocom/x25519KexProtocol.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/x25519KexProtocol.cpp",
+  "output": "CMakeFiles/protocom.dir/x25519KexProtocol.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/EncrMessageCoder.cpp.o -c /home/cufon/CLionProjects/protocom/EncrMessageCoder.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/EncrMessageCoder.cpp",
+  "output": "CMakeFiles/protocom.dir/EncrMessageCoder.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/Authenticator.cpp.o -c /home/cufon/CLionProjects/protocom/Authenticator.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/Authenticator.cpp",
+  "output": "CMakeFiles/protocom.dir/Authenticator.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/ProtocolAuthenticationHandler.cpp.o -c /home/cufon/CLionProjects/protocom/ProtocolAuthenticationHandler.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/ProtocolAuthenticationHandler.cpp",
+  "output": "CMakeFiles/protocom.dir/ProtocolAuthenticationHandler.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/Client.cpp.o -c /home/cufon/CLionProjects/protocom/Client.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/Client.cpp",
+  "output": "CMakeFiles/protocom.dir/Client.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/ProtocolUserHandler.cpp.o -c /home/cufon/CLionProjects/protocom/ProtocolUserHandler.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/ProtocolUserHandler.cpp",
+  "output": "CMakeFiles/protocom.dir/ProtocolUserHandler.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/ProtocolUserHandlerFactory.cpp.o -c /home/cufon/CLionProjects/protocom/ProtocolUserHandlerFactory.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/ProtocolUserHandlerFactory.cpp",
+  "output": "CMakeFiles/protocom.dir/ProtocolUserHandlerFactory.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/NullUserHandlerFactory.cpp.o -c /home/cufon/CLionProjects/protocom/NullUserHandlerFactory.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/NullUserHandlerFactory.cpp",
+  "output": "CMakeFiles/protocom.dir/NullUserHandlerFactory.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/WorkQueue.cpp.o -c /home/cufon/CLionProjects/protocom/WorkQueue.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/WorkQueue.cpp",
+  "output": "CMakeFiles/protocom.dir/WorkQueue.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/ServerWorker.cpp.o -c /home/cufon/CLionProjects/protocom/ServerWorker.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/ServerWorker.cpp",
+  "output": "CMakeFiles/protocom.dir/ServerWorker.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/PFramer.cpp.o -c /home/cufon/CLionProjects/protocom/PFramer.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/PFramer.cpp",
+  "output": "CMakeFiles/protocom.dir/PFramer.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom.dir/PDeframer.cpp.o -c /home/cufon/CLionProjects/protocom/PDeframer.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/PDeframer.cpp",
+  "output": "CMakeFiles/protocom.dir/PDeframer.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom_test.dir/main.cpp.o -c /home/cufon/CLionProjects/protocom/main.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/main.cpp",
+  "output": "CMakeFiles/protocom_test.dir/main.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom_test.dir/TestUserHandler.cpp.o -c /home/cufon/CLionProjects/protocom/TestUserHandler.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/TestUserHandler.cpp",
+  "output": "CMakeFiles/protocom_test.dir/TestUserHandler.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom_test.dir/TestUserHandlerFactory.cpp.o -c /home/cufon/CLionProjects/protocom/TestUserHandlerFactory.cpp",
+  "file": "/home/cufon/CLionProjects/protocom/TestUserHandlerFactory.cpp",
+  "output": "CMakeFiles/protocom_test.dir/TestUserHandlerFactory.cpp.o"
+},
+{
+  "directory": "/home/cufon/CLionProjects/protocom",
+  "command": "/usr/bin/c++  -I/home/cufon/CLionProjects/protocom/host_files -Wl,--copy-dt-needed-entries -o CMakeFiles/protocom_test.dir/testuserprotocol.pb.cc.o -c /home/cufon/CLionProjects/protocom/testuserprotocol.pb.cc",
+  "file": "/home/cufon/CLionProjects/protocom/testuserprotocol.pb.cc",
+  "output": "CMakeFiles/protocom_test.dir/testuserprotocol.pb.cc.o"
+}
+]

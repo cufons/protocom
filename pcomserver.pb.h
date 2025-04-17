@@ -196,31 +196,6 @@ const std::string& ServerAuthResponse_ResponseStatus_Name(T value) {
 }
 const std::string& ServerAuthResponse_ResponseStatus_Name(ServerAuthResponse_ResponseStatus value);
 bool ServerAuthResponse_ResponseStatus_Parse(absl::string_view name, ServerAuthResponse_ResponseStatus* value);
-enum ServerAuthResponse_AuthMethod : int {
-  ServerAuthResponse_AuthMethod_AUTH_UNKNOWN = 0,
-  ServerAuthResponse_AuthMethod_AUTH_CHALLENGE = 1,
-  ServerAuthResponse_AuthMethod_AUTH_KEY = 2,
-  ServerAuthResponse_AuthMethod_ServerAuthResponse_AuthMethod_INT_MIN_SENTINEL_DO_NOT_USE_ =
-      std::numeric_limits<::int32_t>::min(),
-  ServerAuthResponse_AuthMethod_ServerAuthResponse_AuthMethod_INT_MAX_SENTINEL_DO_NOT_USE_ =
-      std::numeric_limits<::int32_t>::max(),
-};
-
-bool ServerAuthResponse_AuthMethod_IsValid(int value);
-extern const uint32_t ServerAuthResponse_AuthMethod_internal_data_[];
-constexpr ServerAuthResponse_AuthMethod ServerAuthResponse_AuthMethod_AuthMethod_MIN = static_cast<ServerAuthResponse_AuthMethod>(0);
-constexpr ServerAuthResponse_AuthMethod ServerAuthResponse_AuthMethod_AuthMethod_MAX = static_cast<ServerAuthResponse_AuthMethod>(2);
-constexpr int ServerAuthResponse_AuthMethod_AuthMethod_ARRAYSIZE = 2 + 1;
-const std::string& ServerAuthResponse_AuthMethod_Name(ServerAuthResponse_AuthMethod value);
-template <typename T>
-const std::string& ServerAuthResponse_AuthMethod_Name(T value) {
-  static_assert(std::is_same<T, ServerAuthResponse_AuthMethod>::value ||
-                    std::is_integral<T>::value,
-                "Incorrect type passed to AuthMethod_Name().");
-  return ServerAuthResponse_AuthMethod_Name(static_cast<ServerAuthResponse_AuthMethod>(value));
-}
-const std::string& ServerAuthResponse_AuthMethod_Name(ServerAuthResponse_AuthMethod value);
-bool ServerAuthResponse_AuthMethod_Parse(absl::string_view name, ServerAuthResponse_AuthMethod* value);
 
 // ===================================================================
 
@@ -352,49 +327,12 @@ class ServerAuthResponse final : public ::google::protobuf::MessageLite
   static inline bool ResponseStatus_Parse(absl::string_view name, ResponseStatus* value) {
     return ServerAuthResponse_ResponseStatus_Parse(name, value);
   }
-  using AuthMethod = ServerAuthResponse_AuthMethod;
-  static constexpr AuthMethod AUTH_UNKNOWN = ServerAuthResponse_AuthMethod_AUTH_UNKNOWN;
-  static constexpr AuthMethod AUTH_CHALLENGE = ServerAuthResponse_AuthMethod_AUTH_CHALLENGE;
-  static constexpr AuthMethod AUTH_KEY = ServerAuthResponse_AuthMethod_AUTH_KEY;
-  static inline bool AuthMethod_IsValid(int value) {
-    return ServerAuthResponse_AuthMethod_IsValid(value);
-  }
-  static constexpr AuthMethod AuthMethod_MIN = ServerAuthResponse_AuthMethod_AuthMethod_MIN;
-  static constexpr AuthMethod AuthMethod_MAX = ServerAuthResponse_AuthMethod_AuthMethod_MAX;
-  static constexpr int AuthMethod_ARRAYSIZE = ServerAuthResponse_AuthMethod_AuthMethod_ARRAYSIZE;
-  template <typename T>
-  static inline const std::string& AuthMethod_Name(T value) {
-    return ServerAuthResponse_AuthMethod_Name(value);
-  }
-  static inline bool AuthMethod_Parse(absl::string_view name, AuthMethod* value) {
-    return ServerAuthResponse_AuthMethod_Parse(name, value);
-  }
 
   // accessors -------------------------------------------------------
   enum : int {
-    kMethodFieldNumber = 3,
     kServerInfoFieldNumber = 2,
     kStatusFieldNumber = 1,
   };
-  // repeated .ServerAuthResponse.AuthMethod method = 3;
-  int method_size() const;
-  private:
-  int _internal_method_size() const;
-
-  public:
-  void clear_method() ;
-  public:
-  ::ServerAuthResponse_AuthMethod method(int index) const;
-  void set_method(int index, ::ServerAuthResponse_AuthMethod value);
-  void add_method(::ServerAuthResponse_AuthMethod value);
-  const ::google::protobuf::RepeatedField<int>& method() const;
-  ::google::protobuf::RepeatedField<int>* mutable_method();
-
-  private:
-  const ::google::protobuf::RepeatedField<int>& _internal_method() const;
-  ::google::protobuf::RepeatedField<int>* _internal_mutable_method();
-
-  public:
   // optional string serverInfo = 2;
   bool has_serverinfo() const;
   void clear_serverinfo() ;
@@ -427,7 +365,7 @@ class ServerAuthResponse final : public ::google::protobuf::MessageLite
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 3, 0,
+      1, 2, 0,
       37, 2>
       _table_;
   friend class ::google::protobuf::MessageLite;
@@ -445,8 +383,6 @@ class ServerAuthResponse final : public ::google::protobuf::MessageLite
                           ::google::protobuf::Arena* arena, const Impl_& from);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     mutable ::google::protobuf::internal::CachedSize _cached_size_;
-    ::google::protobuf::RepeatedField<int> method_;
-    mutable ::google::protobuf::internal::CachedSize _method_cached_byte_size_;
     ::google::protobuf::internal::ArenaStringPtr serverinfo_;
     int status_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -765,8 +701,44 @@ class ClientAuthRequest final : public ::google::protobuf::MessageLite
 
   // accessors -------------------------------------------------------
   enum : int {
+    kUsernameFieldNumber = 2,
+    kAuthCredentialFieldNumber = 3,
     kRequestFieldNumber = 1,
   };
+  // optional string username = 2;
+  bool has_username() const;
+  void clear_username() ;
+  const std::string& username() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_username(Arg_&& arg, Args_... args);
+  std::string* mutable_username();
+  PROTOBUF_NODISCARD std::string* release_username();
+  void set_allocated_username(std::string* value);
+
+  private:
+  const std::string& _internal_username() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_username(
+      const std::string& value);
+  std::string* _internal_mutable_username();
+
+  public:
+  // optional bytes authCredential = 3;
+  bool has_authcredential() const;
+  void clear_authcredential() ;
+  const std::string& authcredential() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_authcredential(Arg_&& arg, Args_... args);
+  std::string* mutable_authcredential();
+  PROTOBUF_NODISCARD std::string* release_authcredential();
+  void set_allocated_authcredential(std::string* value);
+
+  private:
+  const std::string& _internal_authcredential() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_authcredential(
+      const std::string& value);
+  std::string* _internal_mutable_authcredential();
+
+  public:
   // .ClientAuthRequest.RequestType request = 1;
   void clear_request() ;
   ::ClientAuthRequest_RequestType request() const;
@@ -782,8 +754,8 @@ class ClientAuthRequest final : public ::google::protobuf::MessageLite
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      0, 1, 0,
-      0, 2>
+      2, 3, 0,
+      34, 2>
       _table_;
   friend class ::google::protobuf::MessageLite;
   friend class ::google::protobuf::Arena;
@@ -798,8 +770,11 @@ class ClientAuthRequest final : public ::google::protobuf::MessageLite
                           ::google::protobuf::Arena* arena);
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from);
-    int request_;
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
     mutable ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr username_;
+    ::google::protobuf::internal::ArenaStringPtr authcredential_;
+    int request_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -935,9 +910,27 @@ class ServerConnectedStateResponse final : public ::google::protobuf::MessageLit
 
   // accessors -------------------------------------------------------
   enum : int {
+    kIvFieldNumber = 3,
     kKexFieldNumber = 2,
     kStatusFieldNumber = 1,
   };
+  // optional bytes iv = 3;
+  bool has_iv() const;
+  void clear_iv() ;
+  const std::string& iv() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_iv(Arg_&& arg, Args_... args);
+  std::string* mutable_iv();
+  PROTOBUF_NODISCARD std::string* release_iv();
+  void set_allocated_iv(std::string* value);
+
+  private:
+  const std::string& _internal_iv() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_iv(
+      const std::string& value);
+  std::string* _internal_mutable_iv();
+
+  public:
   // optional .KexMsg kex = 2;
   bool has_kex() const;
   void clear_kex() ;
@@ -968,7 +961,7 @@ class ServerConnectedStateResponse final : public ::google::protobuf::MessageLit
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 2, 1,
+      2, 3, 1,
       0, 2>
       _table_;
   friend class ::google::protobuf::MessageLite;
@@ -986,6 +979,7 @@ class ServerConnectedStateResponse final : public ::google::protobuf::MessageLit
                           ::google::protobuf::Arena* arena, const Impl_& from);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     mutable ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr iv_;
     ::KexMsg* kex_;
     int status_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -1417,14 +1411,14 @@ inline void ServerConnectedStateResponse::_internal_set_status(::ServerConnected
 
 // optional .KexMsg kex = 2;
 inline bool ServerConnectedStateResponse::has_kex() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.kex_ != nullptr);
   return value;
 }
 inline void ServerConnectedStateResponse::clear_kex() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (_impl_.kex_ != nullptr) _impl_.kex_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
 }
 inline const ::KexMsg& ServerConnectedStateResponse::_internal_kex() const {
   PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
@@ -1442,16 +1436,16 @@ inline void ServerConnectedStateResponse::unsafe_arena_set_allocated_kex(::KexMs
   }
   _impl_.kex_ = reinterpret_cast<::KexMsg*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000001u;
+    _impl_._has_bits_[0] |= 0x00000002u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
+    _impl_._has_bits_[0] &= ~0x00000002u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:ServerConnectedStateResponse.kex)
 }
 inline ::KexMsg* ServerConnectedStateResponse::release_kex() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
 
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
   ::KexMsg* released = _impl_.kex_;
   _impl_.kex_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -1471,7 +1465,7 @@ inline ::KexMsg* ServerConnectedStateResponse::unsafe_arena_release_kex() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   // @@protoc_insertion_point(field_release:ServerConnectedStateResponse.kex)
 
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
   ::KexMsg* temp = _impl_.kex_;
   _impl_.kex_ = nullptr;
   return temp;
@@ -1485,7 +1479,7 @@ inline ::KexMsg* ServerConnectedStateResponse::_internal_mutable_kex() {
   return _impl_.kex_;
 }
 inline ::KexMsg* ServerConnectedStateResponse::mutable_kex() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_._has_bits_[0] |= 0x00000002u;
   ::KexMsg* _msg = _internal_mutable_kex();
   // @@protoc_insertion_point(field_mutable:ServerConnectedStateResponse.kex)
   return _msg;
@@ -1502,13 +1496,84 @@ inline void ServerConnectedStateResponse::set_allocated_kex(::KexMsg* value) {
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000001u;
+    _impl_._has_bits_[0] |= 0x00000002u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
+    _impl_._has_bits_[0] &= ~0x00000002u;
   }
 
   _impl_.kex_ = reinterpret_cast<::KexMsg*>(value);
   // @@protoc_insertion_point(field_set_allocated:ServerConnectedStateResponse.kex)
+}
+
+// optional bytes iv = 3;
+inline bool ServerConnectedStateResponse::has_iv() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void ServerConnectedStateResponse::clear_iv() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.iv_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& ServerConnectedStateResponse::iv() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:ServerConnectedStateResponse.iv)
+  return _internal_iv();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ServerConnectedStateResponse::set_iv(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.iv_.SetBytes(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:ServerConnectedStateResponse.iv)
+}
+inline std::string* ServerConnectedStateResponse::mutable_iv() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_iv();
+  // @@protoc_insertion_point(field_mutable:ServerConnectedStateResponse.iv)
+  return _s;
+}
+inline const std::string& ServerConnectedStateResponse::_internal_iv() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.iv_.Get();
+}
+inline void ServerConnectedStateResponse::_internal_set_iv(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.iv_.Set(value, GetArena());
+}
+inline std::string* ServerConnectedStateResponse::_internal_mutable_iv() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  return _impl_.iv_.Mutable( GetArena());
+}
+inline std::string* ServerConnectedStateResponse::release_iv() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:ServerConnectedStateResponse.iv)
+  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  auto* released = _impl_.iv_.Release();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.iv_.Set("", GetArena());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  return released;
+}
+inline void ServerConnectedStateResponse::set_allocated_iv(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  _impl_.iv_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.iv_.IsDefault()) {
+          _impl_.iv_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerConnectedStateResponse.iv)
 }
 
 // -------------------------------------------------------------------
@@ -1535,6 +1600,148 @@ inline ::ClientAuthRequest_RequestType ClientAuthRequest::_internal_request() co
 inline void ClientAuthRequest::_internal_set_request(::ClientAuthRequest_RequestType value) {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   _impl_.request_ = value;
+}
+
+// optional string username = 2;
+inline bool ClientAuthRequest::has_username() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void ClientAuthRequest::clear_username() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.username_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& ClientAuthRequest::username() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:ClientAuthRequest.username)
+  return _internal_username();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ClientAuthRequest::set_username(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.username_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:ClientAuthRequest.username)
+}
+inline std::string* ClientAuthRequest::mutable_username() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_username();
+  // @@protoc_insertion_point(field_mutable:ClientAuthRequest.username)
+  return _s;
+}
+inline const std::string& ClientAuthRequest::_internal_username() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.username_.Get();
+}
+inline void ClientAuthRequest::_internal_set_username(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.username_.Set(value, GetArena());
+}
+inline std::string* ClientAuthRequest::_internal_mutable_username() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  return _impl_.username_.Mutable( GetArena());
+}
+inline std::string* ClientAuthRequest::release_username() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:ClientAuthRequest.username)
+  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  auto* released = _impl_.username_.Release();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.username_.Set("", GetArena());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  return released;
+}
+inline void ClientAuthRequest::set_allocated_username(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  _impl_.username_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.username_.IsDefault()) {
+          _impl_.username_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ClientAuthRequest.username)
+}
+
+// optional bytes authCredential = 3;
+inline bool ClientAuthRequest::has_authcredential() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void ClientAuthRequest::clear_authcredential() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.authcredential_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline const std::string& ClientAuthRequest::authcredential() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:ClientAuthRequest.authCredential)
+  return _internal_authcredential();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ClientAuthRequest::set_authcredential(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_.authcredential_.SetBytes(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:ClientAuthRequest.authCredential)
+}
+inline std::string* ClientAuthRequest::mutable_authcredential() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_authcredential();
+  // @@protoc_insertion_point(field_mutable:ClientAuthRequest.authCredential)
+  return _s;
+}
+inline const std::string& ClientAuthRequest::_internal_authcredential() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.authcredential_.Get();
+}
+inline void ClientAuthRequest::_internal_set_authcredential(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_.authcredential_.Set(value, GetArena());
+}
+inline std::string* ClientAuthRequest::_internal_mutable_authcredential() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  return _impl_.authcredential_.Mutable( GetArena());
+}
+inline std::string* ClientAuthRequest::release_authcredential() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:ClientAuthRequest.authCredential)
+  if ((_impl_._has_bits_[0] & 0x00000002u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  auto* released = _impl_.authcredential_.Release();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.authcredential_.Set("", GetArena());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  return released;
+}
+inline void ClientAuthRequest::set_allocated_authcredential(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  _impl_.authcredential_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.authcredential_.IsDefault()) {
+          _impl_.authcredential_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ClientAuthRequest.authCredential)
 }
 
 // -------------------------------------------------------------------
@@ -1634,51 +1841,6 @@ inline void ServerAuthResponse::set_allocated_serverinfo(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:ServerAuthResponse.serverInfo)
 }
 
-// repeated .ServerAuthResponse.AuthMethod method = 3;
-inline int ServerAuthResponse::_internal_method_size() const {
-  return _internal_method().size();
-}
-inline int ServerAuthResponse::method_size() const {
-  return _internal_method_size();
-}
-inline void ServerAuthResponse::clear_method() {
-  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  _impl_.method_.Clear();
-}
-inline ::ServerAuthResponse_AuthMethod ServerAuthResponse::method(int index) const {
-  // @@protoc_insertion_point(field_get:ServerAuthResponse.method)
-  return static_cast<::ServerAuthResponse_AuthMethod>(_internal_method().Get(index));
-}
-inline void ServerAuthResponse::set_method(int index, ::ServerAuthResponse_AuthMethod value) {
-  _internal_mutable_method()->Set(index, value);
-  // @@protoc_insertion_point(field_set:ServerAuthResponse.method)
-}
-inline void ServerAuthResponse::add_method(::ServerAuthResponse_AuthMethod value) {
-  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  _internal_mutable_method()->Add(value);
-  // @@protoc_insertion_point(field_add:ServerAuthResponse.method)
-}
-inline const ::google::protobuf::RepeatedField<int>& ServerAuthResponse::method() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:ServerAuthResponse.method)
-  return _internal_method();
-}
-inline ::google::protobuf::RepeatedField<int>* ServerAuthResponse::mutable_method()
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable_list:ServerAuthResponse.method)
-  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
-  return _internal_mutable_method();
-}
-inline const ::google::protobuf::RepeatedField<int>& ServerAuthResponse::_internal_method()
-    const {
-  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
-  return _impl_.method_;
-}
-inline ::google::protobuf::RepeatedField<int>* ServerAuthResponse::_internal_mutable_method() {
-  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
-  return &_impl_.method_;
-}
-
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif  // __GNUC__
@@ -1699,8 +1861,6 @@ template <>
 struct is_proto_enum<::ClientAuthRequest_RequestType> : std::true_type {};
 template <>
 struct is_proto_enum<::ServerAuthResponse_ResponseStatus> : std::true_type {};
-template <>
-struct is_proto_enum<::ServerAuthResponse_AuthMethod> : std::true_type {};
 
 }  // namespace protobuf
 }  // namespace google

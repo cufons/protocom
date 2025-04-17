@@ -6,13 +6,15 @@
 #define PROTOCOM_IOFRAMESOCKET_H
 
 #include <vector>
-#include "IIOFrame.h"
+#include "IFrameIO.h"
 
 namespace protocom {
 
-    class IOFrameSocket : public IIOFrame {
+    class IOFrameSocket : public IFrameIO {
         int sockfd;
         bool conn_open;
+        bool read_eagain;
+        bool write_eagain;
         std::vector<uint8_t> msgBuf;
         size_t try_recv(void* buf,size_t n);
         size_t try_send(const void* buf,size_t n);
@@ -26,6 +28,10 @@ namespace protocom {
 
         bool isEOF() override;
         void setTimeout(int seconds) const;
+
+        bool isWriteExhausted() override;
+
+        bool isReadExhausted() override;
     };
 
 } // protocom
